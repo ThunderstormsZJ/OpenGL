@@ -9,24 +9,30 @@ public:
 		m_shader(shader),
 		m_window(window)
 	{
-		m_camera = new Camera();
 		m_transform = new Transform(m_shader);
 		m_shader->setFloat("mixValue", 0.2f);
 
+		m_camera = new Camera();
 		m_camera->processMouseInput(window);
+
+		//m_transform->setProjection(m_camera->getFov());
+		//m_transform->setViewMartix(m_camera->getViewMartix());
 	}
 
 	void update(float deltaTime) {
 		//upDownMix();
 		m_camera->processInput(m_window, deltaTime);
+
+		m_transform->setProjection(m_camera->getFov());
 		m_transform->setViewMartix(m_camera->getViewMartix());
+		createCueBox();
 	}
 
 	void createCueBox() {
 		for (int i = 0; i < cubePositions.size(); i++)
 		{
 			m_transform->setPosition(cubePositions[i]);
-			m_transform->updateTransform();
+			m_transform->setRotate(i * 10, glm::vec3(1, 1, 1));
 			glDrawArrays(GL_TRIANGLES, 0, 36);
 		}
 	}

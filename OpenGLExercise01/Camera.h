@@ -1,6 +1,4 @@
 #pragma once
-#define WINDOW_WIDTH 1280
-#define WINDOW_HEIGHT 720
 
 class Camera
 {
@@ -10,9 +8,12 @@ public:
 		m_cameraYaw = -90;
 		m_cameraPos = glm::vec3(0, 0, 3);
 		m_worldUp = glm::vec3(0, 1, 0);
+		m_cameraFov = 45.0f;
 
 		updateVector();
 	}
+
+	float getFov() { return m_cameraFov; }
 
 	glm::mat4 getViewMartix() {
 		glm::mat4 viewMartix = glm::lookAt(m_cameraPos, m_cameraPos + m_cameraFont, m_cameraUp);
@@ -20,6 +21,7 @@ public:
 		return viewMartix;
 	}
 
+	// ASDA上下左右操作
 	void processInput(GLFWwindow* window, float deltaTime) {
 		float moveSpeed = 2.5f * deltaTime;
 		if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
@@ -42,10 +44,27 @@ public:
 	void processMouseInput(GLFWwindow* window) {
 		glfwSetWindowUserPointer(window, static_cast<void*>(this));
 		glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED); // 捕获光标
+		// 鼠标移动
 		glfwSetCursorPosCallback(window, [](GLFWwindow* window, double xpos, double ypos) {
 			auto self = static_cast<Camera*>(glfwGetWindowUserPointer(window));
 			self->mouseEulerMove(xpos, ypos);
 		});
+
+		// 缩放操作
+		glfwSetScrollCallback(window, [](GLFWwindow* window, double xoffset, double yoffset) {
+			auto self = static_cast<Camera*>(glfwGetWindowUserPointer(window));
+			self->mouseScroll(xoffset, yoffset);
+		});
+	}
+
+	void mouseScroll(double xoffset, double yoffset) {
+		m_cameraFov -= yoffset;
+		if (m_cameraFov <= 1.0f) {
+			m_cameraFov = 1.0f;
+		}
+		if (m_cameraFov >= 45.0f) {
+			m_cameraFov = 45.0f;
+		}
 	}
 
 	void mouseEulerMove(double xpos, double ypos) {
@@ -64,6 +83,12 @@ public:
 		m_cameraYaw += xOffset * m_mouseMoveSpeed;
 		m_cameraPitch += yOffset * m_mouseMoveSpeed;
 
+		// 旋转90度之后 视角会发生逆转
+		if (m_cameraPitch > 89.0f)
+			m_cameraPitch = 89.0f;
+		if (m_cameraPitch < -89.0f)
+			m_cameraPitch = -89.0f;
+
 		updateVector();
 	}
 
@@ -74,6 +99,8 @@ public:
 		font.z = cos(glm::radians(m_cameraPitch)) * sin(glm::radians(m_cameraYaw));
 		m_cameraFont = glm::normalize(font);
 		m_cameraRight = glm::normalize(glm::cross(m_cameraFont, m_worldUp));
+
+		// 可以使用CameraUp or WorldUp
 		m_cameraUp = glm::normalize(glm::cross(m_cameraRight, m_cameraFont));
 	}
 private:
@@ -88,5 +115,6 @@ private:
 	glm::vec3 m_cameraFont;
 	glm::vec3 m_cameraUp;
 	glm::vec3 m_cameraRight;
+	float m_cameraFov;
 	glm::vec3 m_worldUp;
 };

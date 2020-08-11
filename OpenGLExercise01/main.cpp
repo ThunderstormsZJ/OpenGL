@@ -219,8 +219,6 @@ int main() {
 		float currentFrame = glfwGetTime();
 		deltaTime = currentFrame - lastFrame;
 		lastFrame = currentFrame;
-
-		example.update(deltaTime);
 		processInput(window);
 
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
@@ -233,7 +231,7 @@ int main() {
 		glBindTexture(GL_TEXTURE_2D, texture1);
 		glBindTexture(GL_TEXTURE_2D, texture2);
 
-		example.createCueBox();
+		example.update(deltaTime);
 		//glDrawElements(GL_TRIANGLES, sizeof(indies), GL_UNSIGNED_INT, 0);
 
 		glfwSwapBuffers(window); 
