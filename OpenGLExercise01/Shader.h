@@ -8,8 +8,6 @@
 #include <GLFW/glfw3.h>
 #include <vector>
 #include <functional>
-#define WINDOW_WIDTH 1280
-#define WINDOW_HEIGHT 720
 
 // ∂¡»°Shaderµµ
 class Shader
