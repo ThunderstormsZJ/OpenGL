@@ -18,6 +18,8 @@ public:
 	void setInt(const std::string &name, float value);
 	void setFloat(const std::string &name, float value);
 	void setMat(const std::string &name, float* value);
+	void setVec3(const std::string& name, const float* value);
+	void setVec3(const std::string& name, float x, float y, float z);
 private:
 	const char* vertexSource;
 	const char*  fragmentSource;

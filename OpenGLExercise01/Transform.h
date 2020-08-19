@@ -10,7 +10,14 @@ public:
 
 	void setPosition(glm::vec3 pos) {
 		m_modelMatrix = glm::translate(glm::mat4(1.0f), pos);
-		
+	}
+
+	void setScale(float scale) {
+		m_modelMatrix = glm::scale(m_modelMatrix, glm::vec3(scale, scale, scale));
+	}
+
+	void setScale(float x, float y, float z) {
+		m_modelMatrix = glm::scale(m_modelMatrix, glm::vec3(x, y, z));
 	}
 
 	void setRotate(float angle, glm::vec3 axis) {

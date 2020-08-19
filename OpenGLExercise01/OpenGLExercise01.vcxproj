@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -133,8 +133,11 @@
     <Image Include="Resources\container.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Shader\FragmentShader.glsl" />
-    <None Include="Shader\VertextShader.glsl" />
+    <None Include="Shader\light_FragmentShader.glsl" />
+    <None Include="Shader\light_lamp_FragmentShader.glsl" />
+    <None Include="Shader\light_VertextShader.glsl" />
+    <None Include="Shader\Texture_FragmentShader.glsl" />
+    <None Include="Shader\Texture_VertextShader.glsl" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />

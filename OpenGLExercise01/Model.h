@@ -10,6 +10,7 @@ public:
 	}
 	virtual void update(float delataTime) = 0;
 	virtual void render() {
+		m_shader->use();
 		updateMartix();
 	}
 	virtual void destroy() = 0;

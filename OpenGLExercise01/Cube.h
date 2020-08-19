@@ -51,7 +51,6 @@ class Cube:public Model
 public:
 	Cube(Shader* shader):Model(shader) {
 		m_shader->use();
-		m_shader->setFloat("mixValue", 0.2f);
 		// VAO≥ı ºªØ
 		glGenVertexArrays(1, &VAO);
 		glBindVertexArray(VAO);
