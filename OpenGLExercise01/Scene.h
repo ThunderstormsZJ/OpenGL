@@ -16,20 +16,22 @@ public:
 	}
 
 	void createLightCueBox() {
+		glm::vec3 lightPos = glm::vec3(1.2f, 1.0, 2.0f);
+		// lamp
+		Shader* lampShader = new Shader("Shader/light_VertextShader.glsl", "Shader/light_lamp_FragmentShader.glsl");
+		Cube* lamp = new Cube(lampShader);
+		lamp->setPosition(lightPos);
+		lamp->setScale(0.2);
+		addChild(lamp);
+
 		// box
 		Shader* boxShader = new Shader("Shader/light_VertextShader.glsl", "Shader/light_FragmentShader.glsl");
 		Cube* box = new Cube(boxShader);
 		boxShader->setVec3("objectColor", glm::value_ptr(glm::vec3(1.0f, 0.5f, 0.31f)));
 		boxShader->setVec3("lightColor", glm::value_ptr(glm::vec3(1.0f, 1.0f, 1.0f)));
+		boxShader->setVec3("lightPos", glm::value_ptr(lightPos));
 		//lightCue->setPosition(cubePositions[1]);
 		addChild(box);
-
-		// lamp
-		Shader* lampShader = new Shader("Shader/light_VertextShader.glsl", "Shader/light_lamp_FragmentShader.glsl");
-		Cube* lamp = new Cube(lampShader);
-		lamp->setPosition(glm::vec3(1.2f, 1.0, 2.0f));
-		lamp->setScale(0.2);
-		addChild(lamp);
 	}
 
 	void createTextureCueBox() {
