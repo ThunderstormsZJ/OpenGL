@@ -4,6 +4,8 @@ class Transform
 public:
 	Transform(Shader* shader);
 
+	Shader* getShader() { return m_shader; }
+ 
 	void setProjection(float fov) {
 		m_projectionMatrix = glm::perspective(glm::radians(fov), (float)WINDOW_WIDTH / WINDOW_HEIGHT, 0.1f, 100.0f);
 	}
@@ -28,15 +30,21 @@ public:
 		m_viewMatrix = martix;
 	}
 
+	void setColor(glm::vec3 color) {
+		m_color = color;
+	}
+
 	void updateMartix() {
 		m_shader->setMat("projection", glm::value_ptr(m_projectionMatrix));
 		m_shader->setMat("model", glm::value_ptr(m_modelMatrix));
 		m_shader->setMat("view", glm::value_ptr(m_viewMatrix));
 	}
 
-private:
+protected:
+	glm::vec3 m_color = glm::vec3(1.0f, 1.0f, 1.0f);
 	Shader* m_shader;
 
+private:
 	glm::mat4 m_modelMatrix = glm::mat4(1.0f);	// Model Matrix
 	glm::mat4 m_viewMatrix = glm::mat4(1.0f);    // View Matrix
 	glm::mat4 m_projectionMatrix = glm::mat4(1.0f);  // Projection Matrix

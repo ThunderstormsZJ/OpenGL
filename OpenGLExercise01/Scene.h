@@ -16,10 +16,11 @@ public:
 	}
 
 	void createLightCueBox() {
-		glm::vec3 lightPos = glm::vec3(1.2f, 1.0, 2.0f);
 		// lamp
+		//Shader* lampShader = new Shader("Shader/light_VertextShader.glsl", "Shader/light_lamp_FragmentShader.glsl");
 		Shader* lampShader = new Shader("Shader/light_VertextShader.glsl", "Shader/light_lamp_FragmentShader.glsl");
 		Cube* lamp = new Cube(lampShader);
+		lamp->setName("lamp");
 		lamp->setPosition(lightPos);
 		lamp->setScale(0.2);
 		addChild(lamp);
@@ -27,10 +28,11 @@ public:
 		// box
 		Shader* boxShader = new Shader("Shader/light_VertextShader.glsl", "Shader/light_FragmentShader.glsl");
 		Cube* box = new Cube(boxShader);
+		box->setName("box");
 		boxShader->setVec3("objectColor", glm::value_ptr(glm::vec3(1.0f, 0.5f, 0.31f)));
 		boxShader->setVec3("lightColor", glm::value_ptr(glm::vec3(1.0f, 1.0f, 1.0f)));
 		boxShader->setVec3("lightPos", glm::value_ptr(lightPos));
-		//lightCue->setPosition(cubePositions[1]);
+		boxShader->setVec3("viewPos", glm::value_ptr(m_camera->getPos()));
 		addChild(box);
 	}
 
@@ -55,8 +57,19 @@ public:
 		m_children.push_back(child);
 	}
 
+	Model* getChildByName(std::string name) {
+		for (auto begin = m_children.begin(); begin != m_children.end(); begin++) 
+		{
+			if ((*begin)->getName() == name) {
+				return (*begin);
+			}
+		}
+	}
+
 	void render(float deltaTime) {
 		m_camera->processInput(m_window, deltaTime);
+
+		getChildByName("box")->getShader()->setVec3("viewPos", glm::value_ptr(m_camera->getPos()));
 
 		for (auto begin = m_children.begin(); begin != m_children.end(); begin++)
 		{
@@ -84,6 +97,7 @@ public:
 private:
 	GLFWwindow* m_window;
 	Camera* m_camera;
+	glm::vec3 lightPos = glm::vec3(1.2f, 1.0, 2.0f);
 	std::vector<Model*> m_children;
 
 	// œ‰◊”Œª÷√

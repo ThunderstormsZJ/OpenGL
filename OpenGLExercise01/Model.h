@@ -6,7 +6,7 @@
 class Model : public Transform
 {
 public:
-	Model(Shader* shader):m_shader(shader),Transform(shader) {
+	Model(Shader* shader):Transform(shader) {
 	}
 	virtual void update(float delataTime) = 0;
 	virtual void render() {
@@ -14,9 +14,11 @@ public:
 		updateMartix();
 	}
 	virtual void destroy() = 0;
+	void setName(std::string v) { m_name = v; }
+	std::string getName() { return m_name; }
 
 protected:
-	Shader* m_shader;
+	std::string m_name;
 	// 设置纹理
 	unsigned int loadTexture(std::string imgPath, int textureIndex) {
 		// Texture 初始化
