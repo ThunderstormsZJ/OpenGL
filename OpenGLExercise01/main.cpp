@@ -5,39 +5,12 @@
 #include <glm.hpp>
 #include <gtc/matrix_transform.hpp>
 #include <gtc/type_ptr.hpp>
-#include "imgui.h"
-#include "imgui_impl_glfw.h"
-#include "imgui_impl_opengl3.h"
-
-#ifdef __APPLE__
-#define GL_SILENCE_DEPRECATION
-#endif
-#if defined(_MSC_VER) && (_MSC_VER >= 1900) && !defined(IMGUI_DISABLE_WIN32_FUNCTIONS)
-#pragma comment(lib, "legacy_stdio_definitions")
-#endif
 
 //通过定义STB_IMAGE_IMPLEMENTATION，预处理器会修改头文件，让其只包含相关的函数定义源码，等于是将这个头文件变为一个 .cpp 文件了。
 #define STB_IMAGE_IMPLEMENTATION
+#include "ImGuiTool.h"
+#include "Main.h"
 #include "Scene.h"
-
-void processInput(GLFWwindow* window) {
-	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
-		glfwSetWindowShouldClose(window, true);
-	}
-}
-
-//const float vertices[] = {
-////  ---- 位置 ----       ---- 颜色 ----     - 纹理坐标 -
-//	0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f,   // 右上
-//	0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f,   // 右下
-//   -0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f,   // 左下
-//   -0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f    // 左上
-//};
-
-unsigned int indies[] = {
-	2,1,0,
-	0,3,2
-};
 
 // 时间差
 float deltaTime = 0.0f;
@@ -67,16 +40,6 @@ int main() {
 	}
 	glfwMakeContextCurrent(window);
 
-	// Set ImGui Context
-	IMGUI_CHECKVERSION();
-	ImGui::CreateContext();
-	ImGuiIO& io = ImGui::GetIO(); (void)io;
-	// Set Style
-	ImGui::StyleColorsDark();
-	// Bind OpenGL And Init
-	ImGui_ImplGlfw_InitForOpenGL(window, true);
-	ImGui_ImplOpenGL3_Init();
-
 	// Init GLEW
 	glewExperimental = true;
 	if (glewInit()!=GLEW_OK)
@@ -94,55 +57,40 @@ int main() {
 	//glFrontFace(GL_CCW); // GL_CCW: 逆时针 GL_CW: 顺时针 （默认逆时针）
 	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);	// 框线模式
 
+	ImGuiTool guiTool(window);
+	WindowContext context;
+	context.window = window;
+	context.tool = &guiTool;
+
 	// Scene
-	Scene scene(window);
+	Scene scene(&context);
 
 	// GL 是从从左到右， 从上到下的逐个像素绘制
 	while (!glfwWindowShouldClose(window))
 	{
-		// Start ImGui Frame
-		ImGui_ImplOpenGL3_NewFrame();
-		ImGui_ImplGlfw_NewFrame();
-		ImGui::NewFrame();
-
-		{
-			//开始绘制ImGui
-
-			ImGui::Begin("IBinary Windows");                          // Create a window called "Hello, world!" and append into it.
-			ImGui::Text("IBinary Blog");
-			//ImGui::SameLine();
-			ImGui::Indent(); //另起一行制表符开始绘制Button
-			ImGui::Button("2222", ImVec2(100, 50));
-
-			ImGui::End();
-		}
-
-		// Rendering
-		ImGui::Render();
+		guiTool.render();
 
 		// time
 		float currentFrame = glfwGetTime();
 		deltaTime = currentFrame - lastFrame;
 		lastFrame = currentFrame;
-		processInput(window);
 
-		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+		glClearColor(guiTool.ClearColor.x, guiTool.ClearColor.y, guiTool.ClearColor.z, guiTool.ClearColor.w);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData()); //必须在绘制完Open之后接着绘制Imgui
+		// scene
 		scene.update(deltaTime);
 		scene.render(deltaTime);
 		//glDrawElements(GL_TRIANGLES, sizeof(indies), GL_UNSIGNED_INT, 0);
+		
+		guiTool.draw();
 
 		glfwSwapBuffers(window); 
 		glfwPollEvents();  // 获取键盘鼠标输入
 	}
 
-	// Cleanup
-	ImGui_ImplOpenGL3_Shutdown();
-	ImGui_ImplGlfw_Shutdown();
-	ImGui::DestroyContext();
-	//scene.destory();
+	scene.destory();
+	guiTool.destroy();
 
 	glfwTerminate();
 	return 0;

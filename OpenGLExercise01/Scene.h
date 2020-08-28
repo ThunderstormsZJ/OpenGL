@@ -5,11 +5,11 @@
 class Scene
 {
 public:
-	Scene(GLFWwindow* window):
-		m_window(window)
+	Scene(WindowContext* context):
+		m_context(context)
 	{
 		m_camera = new Camera();
-		m_camera->processMouseInput(window);
+		m_camera->processMouseInput(context->window);
 		
 		//createTextureCueBox();
 		createLightCueBox();
@@ -67,7 +67,7 @@ public:
 	}
 
 	void render(float deltaTime) {
-		m_camera->processInput(m_window, deltaTime);
+		m_camera->processInput(m_context->window, deltaTime);
 
 		getChildByName("box")->getShader()->setVec3("viewPos", glm::value_ptr(m_camera->getPos()));
 
@@ -95,7 +95,7 @@ public:
 	}
 
 private:
-	GLFWwindow* m_window;
+	WindowContext* m_context;
 	Camera* m_camera;
 	glm::vec3 lightPos = glm::vec3(1.2f, 1.0, 2.0f);
 	std::vector<Model*> m_children;

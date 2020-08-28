@@ -42,22 +42,61 @@ public:
 		if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
 			m_cameraPos -= glm::normalize(glm::cross(m_cameraUp, m_cameraFont)) * moveSpeed;
 		}
+
+		if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
+			//glfwSetWindowShouldClose(window, true);
+			openMouseOperate(window, false);
+		}
+
 	}
 
 	void processMouseInput(GLFWwindow* window) {
 		glfwSetWindowUserPointer(window, static_cast<void*>(this));
-		glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED); // 捕获光标
-		// 鼠标移动
-		glfwSetCursorPosCallback(window, [](GLFWwindow* window, double xpos, double ypos) {
-			auto self = static_cast<Camera*>(glfwGetWindowUserPointer(window));
-			self->mouseEulerMove(xpos, ypos);
-		});
 
-		// 缩放操作
-		glfwSetScrollCallback(window, [](GLFWwindow* window, double xoffset, double yoffset) {
+		// 点击操作
+		glfwSetMouseButtonCallback(window, [](GLFWwindow* window, int button, int action, int mods) {
 			auto self = static_cast<Camera*>(glfwGetWindowUserPointer(window));
-			self->mouseScroll(xoffset, yoffset);
+			if (action == GLFW_PRESS & mods == GLFW_MOD_CONTROL) switch (button)
+			{
+			case GLFW_MOUSE_BUTTON_LEFT:
+				self->openMouseOperate(window, true);
+				break;
+			case GLFW_MOUSE_BUTTON_MIDDLE:
+				//printf("Mosue middle button clicked!");
+				break;
+			case GLFW_MOUSE_BUTTON_RIGHT:
+				//printf("Mosue right button clicked!");
+				break;
+			default:
+				return;
+			}
+			return;
+
 		});
+	}
+
+	void openMouseOperate(GLFWwindow* window, bool isOpen) {
+		if (isOpen) {
+			glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED); // 捕获光标
+
+			// 鼠标移动
+			glfwSetCursorPosCallback(window, [](GLFWwindow* window, double xpos, double ypos) {
+				auto self = static_cast<Camera*>(glfwGetWindowUserPointer(window));
+				self->mouseEulerMove(xpos, ypos);
+			});
+
+			// 缩放操作
+			glfwSetScrollCallback(window, [](GLFWwindow* window, double xoffset, double yoffset) {
+				auto self = static_cast<Camera*>(glfwGetWindowUserPointer(window));
+				self->mouseScroll(xoffset, yoffset);
+			});
+		}
+		else {
+			glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+			glfwSetCursorPosCallback(window, nullptr);
+			glfwSetScrollCallback(window, nullptr);
+		}
+		
 	}
 
 	void mouseScroll(double xoffset, double yoffset) {

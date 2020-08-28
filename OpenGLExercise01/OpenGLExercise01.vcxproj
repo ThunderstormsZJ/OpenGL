@@ -127,6 +127,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="ImGuiTool.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Shader.cpp" />
   </ItemGroup>
@@ -144,6 +145,8 @@
   <ItemGroup>
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Cube.h" />
+    <ClInclude Include="ImGuiTool.h" />
+    <ClInclude Include="Main.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="Model.h" />
     <ClInclude Include="Shader.h" />

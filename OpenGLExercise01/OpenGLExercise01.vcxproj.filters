@@ -27,6 +27,9 @@
     <ClCompile Include="Shader.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="ImGuiTool.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Resources\awesomeface.png">
@@ -73,6 +76,12 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Scene.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGuiTool.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Main.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
