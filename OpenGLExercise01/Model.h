@@ -6,19 +6,26 @@
 class Model : public Transform
 {
 public:
-	Model(Shader* shader):Transform(shader) {
-	}
+	using Transform::Transform;
+
 	virtual void update(float delataTime) = 0;
 	virtual void render() {
 		m_shader->use();
+		setViewMartix(m_camera->getViewMartix());
+		setProjection(m_camera->getFov());
 		updateMartix();
 	}
+
 	virtual void destroy() = 0;
 	void setName(std::string v) { m_name = v; }
 	std::string getName() { return m_name; }
+	void setCamera(Camera* camera) { m_camera = camera; }
+	Camera* getCamera() { return m_camera; }
 
 protected:
 	std::string m_name;
+	Camera* m_camera;
+
 	// 设置纹理
 	unsigned int loadTexture(std::string imgPath, int textureIndex) {
 		// Texture 初始化

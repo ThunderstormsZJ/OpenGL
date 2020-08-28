@@ -146,6 +146,8 @@
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Cube.h" />
     <ClInclude Include="ImGuiTool.h" />
+    <ClInclude Include="Lamp.h" />
+    <ClInclude Include="LightCube.h" />
     <ClInclude Include="Main.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="Model.h" />

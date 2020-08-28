@@ -1,6 +1,7 @@
 #pragma once
 #include "Model.h"
 
+#pragma region Vertices
 const float vertices[] = {
 	-0.5f, -0.5f, -0.5f,  0.0f, 0.0f, 0.0f,  0.0f, -1.0f,
 	 0.5f, -0.5f, -0.5f,  1.0f, 0.0f, 0.0f,  0.0f, -1.0f,
@@ -44,7 +45,6 @@ const float vertices[] = {
 	-0.5f,  0.5f,  0.5f,  0.0f, 0.0f, 0.0f,  1.0f,  0.0f,
 	-0.5f,  0.5f, -0.5f,  0.0f, 1.0f, 0.0f,  1.0f,  0.0f,
 };
-
 //const float vertices[] = {
 ////  ---- 位置 ----       ---- 颜色 ----     - 纹理坐标 -
 //	0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f,   // 右上
@@ -57,6 +57,7 @@ const float vertices[] = {
 //	2,1,0,
 //	0,3,2
 //};
+#pragma endregion
 
 // 生成一个正方体
 class Cube:public Model
@@ -112,9 +113,7 @@ public:
 		glDrawArrays(GL_TRIANGLES, 0, 36);
 	}
 
-	void update(float delataTime) {
-
-	}
+	void update(float delataTime) {}
 
 	void destroy() {
 		glDeleteVertexArrays(1, &VAO);

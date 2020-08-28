@@ -19,6 +19,9 @@
     <Filter Include="资源文件\Shader">
       <UniqueIdentifier>{9ff28c80-c9f8-48b9-b1df-4e7b5383cad0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="头文件\Model">
+      <UniqueIdentifier>{e4a28174-65a9-4369-a11c-78fb48b0ce44}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -63,18 +66,6 @@
     <ClInclude Include="stb_image.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Transform.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="Camera.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="Cube.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="Model.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="Scene.h">
       <Filter>头文件</Filter>
     </ClInclude>
@@ -83,6 +74,24 @@
     </ClInclude>
     <ClInclude Include="Main.h">
       <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>头文件\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="Cube.h">
+      <Filter>头文件\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="Lamp.h">
+      <Filter>头文件\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="Model.h">
+      <Filter>头文件\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="Transform.h">
+      <Filter>头文件\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="LightCube.h">
+      <Filter>头文件\Model</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

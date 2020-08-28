@@ -1,6 +1,8 @@
 #pragma once
 #include "Camera.h"
 #include "Cube.h"
+#include "Lamp.h"
+#include "LightCube.h"
 
 class Scene
 {
@@ -10,29 +12,16 @@ public:
 	{
 		m_camera = new Camera();
 		m_camera->processMouseInput(context->window);
+		m_lamp = new Lamp();
+		addChild(m_lamp);
 		
 		//createTextureCueBox();
 		createLightCueBox();
 	}
 
 	void createLightCueBox() {
-		// lamp
-		//Shader* lampShader = new Shader("Shader/light_VertextShader.glsl", "Shader/light_lamp_FragmentShader.glsl");
-		Shader* lampShader = new Shader("Shader/light_VertextShader.glsl", "Shader/light_lamp_FragmentShader.glsl");
-		Cube* lamp = new Cube(lampShader);
-		lamp->setName("lamp");
-		lamp->setPosition(lightPos);
-		lamp->setScale(0.2);
-		addChild(lamp);
-
 		// box
-		Shader* boxShader = new Shader("Shader/light_VertextShader.glsl", "Shader/light_FragmentShader.glsl");
-		Cube* box = new Cube(boxShader);
-		box->setName("box");
-		boxShader->setVec3("objectColor", glm::value_ptr(glm::vec3(1.0f, 0.5f, 0.31f)));
-		boxShader->setVec3("lightColor", glm::value_ptr(glm::vec3(1.0f, 1.0f, 1.0f)));
-		boxShader->setVec3("lightPos", glm::value_ptr(lightPos));
-		boxShader->setVec3("viewPos", glm::value_ptr(m_camera->getPos()));
+		LightCube* box = new LightCube(m_lamp);
 		addChild(box);
 	}
 
@@ -54,6 +43,7 @@ public:
 	}
 
 	void addChild(Model* child) {
+		child->setCamera(m_camera);
 		m_children.push_back(child);
 	}
 
@@ -69,24 +59,17 @@ public:
 	void render(float deltaTime) {
 		m_camera->processInput(m_context->window, deltaTime);
 
-		getChildByName("box")->getShader()->setVec3("viewPos", glm::value_ptr(m_camera->getPos()));
-
 		for (auto begin = m_children.begin(); begin != m_children.end(); begin++)
 		{
-			(*begin)->setViewMartix(m_camera->getViewMartix());
-			(*begin)->setProjection(m_camera->getFov());
-
 			(*begin)->render();
 		}
 	}
-
 	void update(float delataTime) {
 		for (auto begin = m_children.begin(); begin != m_children.end(); begin++)
 		{
 			(*begin)->update(delataTime);
 		}
 	}
-
 	void destory() {
 		for (auto begin = m_children.begin();begin!=m_children.end();begin++)
 		{
@@ -97,7 +80,7 @@ public:
 private:
 	WindowContext* m_context;
 	Camera* m_camera;
-	glm::vec3 lightPos = glm::vec3(1.2f, 1.0, 2.0f);
+	Lamp* m_lamp;
 	std::vector<Model*> m_children;
 
 	// œ‰◊”Œª÷√
