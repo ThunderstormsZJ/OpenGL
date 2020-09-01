@@ -2,6 +2,9 @@
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
+#include <glm.hpp>
+#include <gtc/matrix_transform.hpp>
+#include <gtc/type_ptr.hpp>
 
 #ifdef __APPLE__
 #define GL_SILENCE_DEPRECATION
@@ -10,9 +13,11 @@
 #pragma comment(lib, "legacy_stdio_definitions")
 #endif
 
+
 class ImGuiTool
 {
 public:
+	glm::vec3 ObjectColor = glm::vec3(1.0f, 0.5f, 0.31f);
 	ImVec4 ClearColor = ImVec4(0.2f, 0.3f, 0.3f, 1.0f);
 
 	ImGuiTool(GLFWwindow* context);

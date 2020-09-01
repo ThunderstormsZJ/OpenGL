@@ -3,6 +3,7 @@
 #include "stb_image.h"
 #include "Transform.h"
 
+// 处理模型的Shader属性
 class Model : public Transform
 {
 public:
@@ -13,7 +14,7 @@ public:
 		m_shader->use();
 		setViewMartix(m_camera->getViewMartix());
 		setProjection(m_camera->getFov());
-		updateMartix();
+		updateShader();
 	}
 
 	virtual void destroy() = 0;
@@ -68,7 +69,6 @@ protected:
 
 		return texture;
 	}
-
 private:
 
 };

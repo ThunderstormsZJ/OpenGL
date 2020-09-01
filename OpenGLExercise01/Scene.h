@@ -20,8 +20,15 @@ public:
 	}
 
 	void createLightCueBox() {
+		ImGuiTool* tool = m_context->tool;
 		// box
-		LightCube* box = new LightCube(m_lamp);
+		Light * light = new Light();
+		light->ViewPos = m_camera->getPPos();
+		light->Color = new glm::vec3(1.0f, 1.0f, 1.0f);
+		light->Position = m_lamp->getPPos();
+
+		LightCube* box = new LightCube(m_lamp, light);
+		box->setColor(&tool->ObjectColor);
 		addChild(box);
 	}
 

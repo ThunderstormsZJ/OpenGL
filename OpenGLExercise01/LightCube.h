@@ -1,12 +1,28 @@
 #pragma once
 #include "Cube.h"
 
+struct Light
+{
+	glm::vec3* ViewPos;
+	glm::vec3* Color;
+	glm::vec3* Position;
+
+	~Light() {
+		delete this->Color;
+	}
+};
+
 class LightCube: public Cube
 {
 public:
-	LightCube(Lamp* lamp):Cube(new Shader("Shader/light_VertextShader.glsl", "Shader/light_FragmentShader.glsl")) 
-	, m_lamp(lamp){
+	LightCube(Lamp* lamp, Light* light):Cube(new Shader("Shader/light_VertextShader.glsl", "Shader/light_FragmentShader.glsl")) 
+	, m_lamp(lamp)
+	, m_light(light){
+		
+	}
 
+	~LightCube() {
+		delete m_light;
 	}
 
 	void render() {
@@ -17,11 +33,11 @@ public:
 
 private:
 	Lamp* m_lamp;
+	Light* m_light;
 
 	void updateLightRender() {
-		m_shader->setVec3("viewPos", glm::value_ptr(m_camera->getPos()));
-		m_shader->setVec3("objectColor", glm::value_ptr(glm::vec3(1.0f, 0.5f, 0.31f)));
-		m_shader->setVec3("lightColor", glm::value_ptr(glm::vec3(1.0f, 1.0f, 1.0f)));
-		m_shader->setVec3("lightPos", glm::value_ptr(m_lamp->Position));
+		m_shader->setVec3("viewPos", glm::value_ptr(*m_light->ViewPos));
+		m_shader->setVec3("lightColor", glm::value_ptr(*m_light->Color));
+		m_shader->setVec3("lightPos", glm::value_ptr(*m_light->Position));
 	}
 };

@@ -32,6 +32,10 @@ void ImGuiTool::render()
 			ImGui::ColorEdit4("Clear Color", (float*)&ClearColor);
 		}
 
+		if (ImGui::CollapsingHeader("Model Config")) {
+			ImGui::ColorEdit3("Color", glm::value_ptr(ObjectColor));
+		}
+
 		if (ImGui::CollapsingHeader("Light Config")) {
 			//ImGui::ColorEdit4("Color", (float*)&ClearColor);
 		}
