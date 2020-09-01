@@ -10,6 +10,7 @@ public:
 	Shader* getShader() { return m_shader; }
 	glm::vec3 getPos() { return m_position; }
 	glm::vec3* getPPos() { return &m_position; }
+	glm::vec3* getPPColor() { return m_color; }
  
 	void setProjection(float fov) {
 		m_projectionMatrix = glm::perspective(glm::radians(fov), (float)WINDOW_WIDTH / WINDOW_HEIGHT, 0.1f, 100.0f);

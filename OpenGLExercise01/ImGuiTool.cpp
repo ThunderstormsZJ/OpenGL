@@ -29,15 +29,15 @@ void ImGuiTool::render()
 		ImGui::Begin("OpenGL Tools");
 
 		if (ImGui::CollapsingHeader("Windows Config")) {
-			ImGui::ColorEdit4("Clear Color", (float*)&ClearColor);
+			ImGui::ColorEdit4("Clear Color", glm::value_ptr(ClearColor));
 		}
 
 		if (ImGui::CollapsingHeader("Model Config")) {
-			ImGui::ColorEdit3("Color", glm::value_ptr(ObjectColor));
+			ImGui::ColorEdit3("Model Color", glm::value_ptr(ObjectColor));
 		}
 
 		if (ImGui::CollapsingHeader("Light Config")) {
-			//ImGui::ColorEdit4("Color", (float*)&ClearColor);
+			ImGui::ColorEdit3("Light Color", glm::value_ptr(LightColor));
 		}
 
 		ImGui::End();

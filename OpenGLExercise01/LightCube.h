@@ -28,6 +28,7 @@ public:
 	void render() {
 		Cube::render();
 
+		setRotate(glfwGetTime() * 0.1, glm::vec3(0, 1, 0));
 		updateLightRender();
 	}
 
@@ -36,7 +37,6 @@ private:
 	Light* m_light;
 
 	void updateLightRender() {
-		m_shader->setVec3("viewPos", glm::value_ptr(*m_light->ViewPos));
 		m_shader->setVec3("lightColor", glm::value_ptr(*m_light->Color));
 		m_shader->setVec3("lightPos", glm::value_ptr(*m_light->Position));
 	}

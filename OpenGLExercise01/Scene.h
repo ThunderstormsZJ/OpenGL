@@ -13,6 +13,7 @@ public:
 		m_camera = new Camera();
 		m_camera->processMouseInput(context->window);
 		m_lamp = new Lamp();
+		m_lamp->setColor(&m_context->tool->LightColor);
 		addChild(m_lamp);
 		
 		//createTextureCueBox();
@@ -24,10 +25,11 @@ public:
 		// box
 		Light * light = new Light();
 		light->ViewPos = m_camera->getPPos();
-		light->Color = new glm::vec3(1.0f, 1.0f, 1.0f);
+		light->Color = m_lamp->getPPColor();
 		light->Position = m_lamp->getPPos();
 
 		LightCube* box = new LightCube(m_lamp, light);
+		// box->setPosition(glm::vec3(1, 0, -3));
 		box->setColor(&tool->ObjectColor);
 		addChild(box);
 	}

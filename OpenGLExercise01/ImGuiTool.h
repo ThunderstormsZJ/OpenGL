@@ -18,7 +18,8 @@ class ImGuiTool
 {
 public:
 	glm::vec3 ObjectColor = glm::vec3(1.0f, 0.5f, 0.31f);
-	ImVec4 ClearColor = ImVec4(0.2f, 0.3f, 0.3f, 1.0f);
+	glm::vec3 LightColor = glm::vec3(1.0f, 1.0f, 1.0f);
+	glm::vec4 ClearColor = glm::vec4(0.2f, 0.3f, 0.3f, 1.0f);
 
 	ImGuiTool(GLFWwindow* context);
 	void init();
