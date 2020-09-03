@@ -1,6 +1,14 @@
 #version 330 core						
 out vec4 FragColor;
 
+struct Material{
+	vec3 ambient;
+	vec3 diffuse;
+	vec3 specular;
+	float shininess;
+};
+
+uniform Material material;
 uniform vec3 objectColor;
 uniform vec3 lightColor;
 uniform float ambientStrenth = 0.1; // 环境光强度
@@ -17,7 +25,7 @@ void main(){
 	vec3 norm = normalize(Normal);
 	vec3 lightDir = normalize(LightPos - FragPos);
 	// diffuse
-	float diffuse = max(dot(norm, lightDir), 0);
+	vec3 diffuse = max(dot(norm, lightDir), 0) * lightColor;
 
 	// ambient
 	vec3 ambient = ambientStrenth * lightColor;

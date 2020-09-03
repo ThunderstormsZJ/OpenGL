@@ -27,8 +27,6 @@ public:
 
 	void render() {
 		Cube::render();
-
-		setRotate(glfwGetTime() * 0.1, glm::vec3(0, 1, 0));
 		updateLightRender();
 	}
 
