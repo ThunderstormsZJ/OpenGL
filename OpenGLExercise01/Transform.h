@@ -41,7 +41,7 @@ public:
 		m_color = color;
 	}
 
-	void updateShader() {
+	virtual void updateShader() {
 		m_shader->setMat("projection", glm::value_ptr(m_projectionMatrix)); // 透视矩阵
 		m_shader->setMat("model", glm::value_ptr(m_modelMatrix)); // 模型矩阵
 		m_shader->setMat("view", glm::value_ptr(m_viewMatrix)); // 观察矩阵

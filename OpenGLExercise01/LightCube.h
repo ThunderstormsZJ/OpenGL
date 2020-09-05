@@ -25,8 +25,8 @@ public:
 		delete m_light;
 	}
 
-	void render() {
-		Cube::render();
+	void updateShader() {
+		Cube::updateShader();
 		updateLightRender();
 	}
 
