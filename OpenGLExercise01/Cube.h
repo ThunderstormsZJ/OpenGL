@@ -1,5 +1,6 @@
 #pragma once
 #include "Model.h"
+#include "StructCollect.h"
 
 #pragma region Vertices
 const float vertices[] = {
@@ -122,15 +123,30 @@ public:
 	}
 
 	void setTexture(std::string imgPath, std::string name, int index) {
-		// ¼ÓÔØÍ¼Æ¬
 		stbi_set_flip_vertically_on_load(true);
-		unsigned int texture = loadTexture(imgPath, index);
-		m_shader->setInt(name, index);
-		glBindTexture(GL_TEXTURE_2D, texture);
+
+		ImgTexture* img = new ImgTexture();
+		img->imgPath = imgPath;
+		img->index = index;
+		img->name = name;
+		img->texture = loadTexture(imgPath, index);		// ¼ÓÔØÍ¼Æ¬
+
+		textures.push_back(img);
+	}
+
+	void updateShader() {
+		Model::updateShader();
+
+		for (auto begin = textures.begin(); begin != textures.end(); begin++)
+		{
+			m_shader->setInt((*begin)->name, (*begin)->index);
+			glBindTexture(GL_TEXTURE_2D, (*begin)->texture);
+		}
+		
 	}
 
 private:
 	unsigned int VAO;
 	unsigned int VBO;
-	std::vector<unsigned int> textures;
+	std::vector<ImgTexture*> textures;
 };

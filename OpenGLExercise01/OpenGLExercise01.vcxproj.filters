@@ -22,6 +22,9 @@
     <Filter Include="头文件\Model">
       <UniqueIdentifier>{e4a28174-65a9-4369-a11c-78fb48b0ce44}</UniqueIdentifier>
     </Filter>
+    <Filter Include="头文件\Common">
+      <UniqueIdentifier>{7e52f9da-9f1f-46f0-97de-e3cb3ceb5773}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -39,6 +42,15 @@
       <Filter>资源文件\Resources</Filter>
     </Image>
     <Image Include="Resources\container.jpg">
+      <Filter>资源文件\Resources</Filter>
+    </Image>
+    <Image Include="Resources\container2.png">
+      <Filter>资源文件\Resources</Filter>
+    </Image>
+    <Image Include="Resources\container2_specular.png">
+      <Filter>资源文件\Resources</Filter>
+    </Image>
+    <Image Include="Resources\matrix.jpg">
       <Filter>资源文件\Resources</Filter>
     </Image>
   </ItemGroup>
@@ -92,6 +104,9 @@
     </ClInclude>
     <ClInclude Include="LightCube.h">
       <Filter>头文件\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="StructCollect.h">
+      <Filter>头文件\Common</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

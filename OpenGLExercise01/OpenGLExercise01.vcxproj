@@ -134,6 +134,9 @@
   <ItemGroup>
     <Image Include="Resources\awesomeface.png" />
     <Image Include="Resources\container.jpg" />
+    <Image Include="Resources\container2.png" />
+    <Image Include="Resources\container2_specular.png" />
+    <Image Include="Resources\matrix.jpg" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Shader\light_FragmentShader.glsl" />
@@ -153,6 +156,7 @@
     <ClInclude Include="Model.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="stb_image.h" />
+    <ClInclude Include="StructCollect.h" />
     <ClInclude Include="Transform.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
