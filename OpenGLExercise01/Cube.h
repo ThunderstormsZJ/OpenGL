@@ -126,10 +126,10 @@ public:
 		stbi_set_flip_vertically_on_load(true);
 
 		ImgTexture* img = new ImgTexture();
-		img->imgPath = imgPath;
-		img->index = index;
-		img->name = name;
-		img->texture = loadTexture(imgPath, index);		// ¼ÓÔØÍ¼Æ¬
+		img->ImgPath = imgPath;
+		img->Index = index;
+		img->Name = name;
+		img->Texture = loadTexture(imgPath, index);		// ¼ÓÔØÍ¼Æ¬
 
 		textures.push_back(img);
 	}
@@ -139,8 +139,8 @@ public:
 
 		for (auto begin = textures.begin(); begin != textures.end(); begin++)
 		{
-			m_shader->setInt((*begin)->name, (*begin)->index);
-			glBindTexture(GL_TEXTURE_2D, (*begin)->texture);
+			m_shader->setInt((*begin)->Name, (*begin)->Index);
+			glBindTexture(GL_TEXTURE_2D, (*begin)->Texture);
 		}
 		
 	}

@@ -32,12 +32,21 @@ void ImGuiTool::render()
 			ImGui::ColorEdit4("Clear Color", glm::value_ptr(ClearColor));
 		}
 
+		int i1 = 0;
 		if (ImGui::CollapsingHeader("Model Config")) {
 			ImGui::ColorEdit3("Model Color", glm::value_ptr(ObjectColor));
+			if (ImGui::TreeNode("Material"))
+			{
+				ImGui::SliderInt("Shininess", &i1, 32, 248);
+				ImGui::TreePop();
+			}
 		}
 
 		if (ImGui::CollapsingHeader("Light Config")) {
-			ImGui::ColorEdit3("Light Color", glm::value_ptr(LightColor));
+			ImGui::ColorEdit3("Light Color", glm::value_ptr(light.Color));
+			ImGui::SliderFloat("Ambient", &light.Ambient, 0.0f, 1.0f, "ambient(%.2f)");
+			ImGui::SliderFloat("Diffuse", &light.Diffuse, 0.0f, 1.0f, "diffuse(%.2f)");
+			ImGui::SliderFloat("Specular", &light.Specular, 0.0f, 1.0f, "specular(%.2f)");
 		}
 
 		ImGui::End();

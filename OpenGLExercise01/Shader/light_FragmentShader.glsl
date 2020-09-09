@@ -35,19 +35,22 @@ void main(){
 	vec3 norm = normalize(Normal);
 	vec3 lightDir = normalize(LightPos - FragPos);
 	// diffuse
-	vec3 diffuse = max(dot(norm, lightDir), 0) * light.diffuse * vec3(texture(material.diffuse, TexCoord));
+	vec3 diffuse = max(dot(norm, lightDir), 0) * light.diffuse * texture(material.diffuse, TexCoord).rgb;
 
 	// ambient
-	vec3 ambient = light.ambient * vec3(texture(material.diffuse, TexCoord));
+	vec3 ambient = light.ambient * texture(material.diffuse, TexCoord).rgb;
 
 	// specular
 	vec3 viewDir = normalize(- FragPos); // viewPos - FragPos => (0,0,0) - FragPos => -FragPos
 	vec3 reflectDir = reflect(-lightDir, norm); //  光源指向物体得方向
 	float spec = pow(max(dot(viewDir, reflectDir), 0), material.shininess);
-	vec3 specular =  spec * light.specular * vec3(texture(material.specular, TexCoord));
+	vec3 specular =  spec * light.specular * texture(material.specular, TexCoord).rgb;
+
+	// mession
+	vec3 mession = texture(material.emission, TexCoord).rgb;
 
 	// result
-	vec3 result = diffuse + ambient + specular + vec3(texture(material.emission, TexCoord));
+	vec3 result = diffuse + ambient + specular + mession;
 
 	FragColor = vec4(result, 1);
 }                                      

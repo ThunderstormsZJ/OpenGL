@@ -57,7 +57,7 @@ public:
 		// 点击操作
 		glfwSetMouseButtonCallback(window, [](GLFWwindow* window, int button, int action, int mods) {
 			auto self = static_cast<Camera*>(glfwGetWindowUserPointer(window));
-			if (action == GLFW_PRESS & mods == GLFW_MOD_CONTROL) switch (button)
+			if ((action == GLFW_PRESS) & mods == GLFW_MOD_CONTROL) switch (button)
 			{
 			case GLFW_MOUSE_BUTTON_LEFT:
 				self->openMouseOperate(window, true);
@@ -79,6 +79,7 @@ public:
 	void openMouseOperate(GLFWwindow* window, bool isOpen) {
 		if (isOpen) {
 			glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED); // 捕获光标
+			m_firstMouse = true;
 
 			// 鼠标移动
 			glfwSetCursorPosCallback(window, [](GLFWwindow* window, double xpos, double ypos) {

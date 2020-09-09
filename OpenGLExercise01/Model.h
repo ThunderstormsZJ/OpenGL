@@ -43,6 +43,7 @@ protected:
 		// 加载图片
 		int width, height, nrChannels;
 		unsigned char* data = stbi_load(imgPath.c_str(), &width, &height, &nrChannels, 0);
+
 		/*
 		第一个参数: 指定了纹理目标(Target)。设置为GL_TEXTURE_2D意味着会生成与当前绑定的纹理对象在同一个目标上的纹理（任何绑定到GL_TEXTURE_1D和GL_TEXTURE_3D的纹理不会受到影响）。
 		第二个参数: 为纹理指定多级渐远纹理的级别，如果你希望单独手动设置每个多级渐远纹理的级别的话。这里我们填0，也就是基本级别。
