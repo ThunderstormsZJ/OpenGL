@@ -6,6 +6,19 @@ struct ImgTexture {
 	std::string Name; // shader对应名称
 	int Index; // shader对应位置
 	unsigned int Texture; // 图片位置
+
+	ImgTexture() {}
+	ImgTexture(std::string imgPath, std::string name, int index) :
+		ImgPath(imgPath),
+		Name(name),
+		Index(index)
+	{
+	}
+
+
+	~ImgTexture() {
+
+	}
 };
 
 struct Material
@@ -13,7 +26,18 @@ struct Material
 	ImgTexture Diffuse;
 	ImgTexture Specular;
 	ImgTexture Emission;
-	float Shininess;
+	int Shininess;
+
+	Material() {}
+	Material(int shininess) :
+		Shininess(shininess)
+	{
+	}
+
+
+	~Material() {
+
+	}
 };
 
 struct Light

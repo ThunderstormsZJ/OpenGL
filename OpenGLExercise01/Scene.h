@@ -22,11 +22,19 @@ public:
 
 	void createLightCueBox() {
 		ImGuiTool* tool = m_context->tool;
+
+		// light
 		Light& light = tool->light;
 		light.Position = m_lamp->getPPos();
 
+		// material
+		Material& material = tool->material;
+		material.Diffuse = ImgTexture("Resources/container2.png", "material.diffuse", 0);
+		material.Specular = ImgTexture("Resources/container2_specular.png", "material.specular", 1);
+		material.Emission = ImgTexture("", "material.emission", 2);
+
 		// box
-		LightCube* box = new LightCube(&light);
+		LightCube* box = new LightCube(&light, &material);
 		addChild(box);
 	}
 

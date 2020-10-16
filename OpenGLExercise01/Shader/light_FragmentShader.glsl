@@ -6,7 +6,7 @@ struct Material{
 	sampler2D diffuse;
 	sampler2D specular;
 	sampler2D emission; // ×Ô·¢¹âÌùÍ¼
-	float shininess;
+	int shininess;
 };
 
 struct Light {

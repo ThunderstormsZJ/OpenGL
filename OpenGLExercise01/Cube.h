@@ -124,12 +124,18 @@ public:
 
 	void setTexture(std::string imgPath, std::string name, int index) {
 		stbi_set_flip_vertically_on_load(true);
-
-		ImgTexture* img = new ImgTexture();
+		ImgTexture* img = new ImgTexture();	
 		img->ImgPath = imgPath;
 		img->Index = index;
 		img->Name = name;
-		img->Texture = loadTexture(imgPath, index);		// ╪стьм╪ф╛
+		img->Texture = loadTexture(imgPath, index);  // ╪стьм╪ф╛
+
+		textures.push_back(img);
+	}
+
+	void setTexture(ImgTexture* img) {
+		stbi_set_flip_vertically_on_load(true);
+		img->Texture = loadTexture(img->ImgPath, img->Index);		// ╪стьм╪ф╛
 
 		textures.push_back(img);
 	}

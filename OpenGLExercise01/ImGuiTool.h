@@ -20,7 +20,7 @@ class ImGuiTool
 public:
 	glm::vec4 ClearColor = glm::vec4(0.2f, 0.3f, 0.3f, 1.0f);
 	glm::vec3 ObjectColor = glm::vec3(1.0f, 0.5f, 0.31f);
-	float Shininess = 32;
+	Material material = Material(32);
 	Light light = Light(
 		glm::vec3(1.0f),
 		0.2f,
