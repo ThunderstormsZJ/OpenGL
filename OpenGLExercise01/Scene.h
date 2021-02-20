@@ -12,9 +12,6 @@ public:
 	{
 		m_camera = new Camera();
 		m_camera->processMouseInput(context->window);
-		m_lamp = new Lamp();
-		m_lamp->setColor(&m_context->tool->light.Color);
-		addChild(m_lamp);
 		
 		//createTextureCueBox();
 		createLightCueBox();
@@ -24,8 +21,16 @@ public:
 		ImGuiTool* tool = m_context->tool;
 
 		// light
-		Light& light = tool->light;
-		light.Position = m_lamp->getPPos();
+		DirLight& dirLight = tool->dirLight;
+		dirLight.Direction = new glm::vec3(-0.2f, -1.0f, -0.3f);
+
+		//for (int i = 0; i < tool->pointLight.Count; i++)
+		//{
+		//	Lamp
+		//}
+		/*	m_lamp = new Lamp();
+		m_lamp->setColor(&m_context->tool->light.Color);
+		addChild(m_lamp);*/
 
 		// material
 		Material& material = tool->material;
@@ -36,14 +41,11 @@ public:
 		// box
 		for (int i = 0; i < cubePositions.size(); i++)
 		{
-			LightCube* box = new LightCube(&light, &material);
+			LightCube* box = new LightCube(m_context, &material);
 			box->setPosition(cubePositions[i]);
 			box->setRotate(i * 10, glm::vec3(1, 1, 1));
 			addChild(box);
 		}
-
-		//LightCube* box = new LightCube(&light, &material);
-		//addChild(box);
 	}
 
 	void createTextureCueBox() {
@@ -101,21 +103,20 @@ public:
 private:
 	WindowContext* m_context;
 	Camera* m_camera;
-	Lamp* m_lamp;
 	std::vector<Model*> m_children;
 
 	// œ‰◊”Œª÷√
 	std::vector<glm::vec3> cubePositions = {
 		glm::vec3(0.0f,  0.0f,  0.0f),
-		//glm::vec3(2.0f,  5.0f, -15.0f),
-		//glm::vec3(-1.5f, -2.2f, -2.5f),
-		//glm::vec3(-3.8f, -2.0f, -12.3f),
-		//glm::vec3(2.4f, -0.4f, -3.5f),
-		//glm::vec3(-1.7f,  3.0f, -7.5f),
-		//glm::vec3(1.3f, -2.0f, -2.5f),
-		//glm::vec3(1.5f,  2.0f, -2.5f),
-		//glm::vec3(1.5f,  0.2f, -1.5f),
-		//glm::vec3(-1.3f,  1.0f, -1.5f)
+		glm::vec3(2.0f,  5.0f, -15.0f),
+		glm::vec3(-1.5f, -2.2f, -2.5f),
+		glm::vec3(-3.8f, -2.0f, -12.3f),
+		glm::vec3(2.4f, -0.4f, -3.5f),
+		glm::vec3(-1.7f,  3.0f, -7.5f),
+		glm::vec3(1.3f, -2.0f, -2.5f),
+		glm::vec3(1.5f,  2.0f, -2.5f),
+		glm::vec3(1.5f,  0.2f, -1.5f),
+		glm::vec3(-1.3f,  1.0f, -1.5f)
 	};
 	
 	//float m_mixValue = 0;

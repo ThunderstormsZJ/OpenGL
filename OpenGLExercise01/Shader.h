@@ -20,6 +20,7 @@ public:
 	void setMat(const std::string &name, float* value);
 	void setVec3(const std::string& name, const float* value);
 	void setVec3(const std::string& name, float x, float y, float z);
+	void setBool(const std::string& name, bool value);
 private:
 	const char* vertexSource;
 	const char*  fragmentSource;

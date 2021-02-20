@@ -139,7 +139,6 @@
     <Image Include="Resources\matrix.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Shader\light_direction_FragmentShader.glsl" />
     <None Include="Shader\light_FragmentShader.glsl" />
     <None Include="Shader\light_lamp_FragmentShader.glsl" />
     <None Include="Shader\light_VertextShader.glsl" />
@@ -161,6 +160,7 @@
     <ClInclude Include="StructCollect.h" />
     <ClInclude Include="Templates.h" />
     <ClInclude Include="Transform.h" />
+    <ClInclude Include="Utils.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

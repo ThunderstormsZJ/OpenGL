@@ -40,25 +40,40 @@ struct Material
 	}
 };
 
-struct Light
-{
-	glm::vec3* Position;
+struct BaseLight {
 	glm::vec3 Color;
+	bool IsOpen;
 	float Ambient;
 	float Diffuse;
 	float Specular;
 
-	Light(){}
-	Light(glm::vec3 color, float ambient, float diffuse, float specular):
+	BaseLight(glm::vec3 color, float ambient, float diffuse, float specular):
 		Color(color),
 		Ambient(ambient),
 		Diffuse(diffuse),
-		Specular(specular)
+		Specular(specular),
+		IsOpen(true)
 	{
 	}
+	
+	~BaseLight(){}
+};
 
+struct PointLight: public BaseLight
+{
+	using BaseLight::BaseLight;
 
-	~Light() {
-		
-	}
+	glm::vec3* Position;
+
+	// 衰减系数
+	float Constant = 1.0f; // 常数项
+	float Linear = 0.09f;  // 一次项
+	float Quadratic = 0.032f; // 二次项
+};
+
+struct DirLight : public BaseLight
+{
+	using BaseLight::BaseLight;
+
+	glm::vec3* Direction;
 };

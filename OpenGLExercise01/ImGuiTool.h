@@ -2,10 +2,13 @@
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
+#include <vector>
 #include <glm.hpp>
 #include <gtc/matrix_transform.hpp>
 #include <gtc/type_ptr.hpp>
 #include "StructCollect.h"
+
+#define NR_POINT_LIGHTS 4
 
 #ifdef __APPLE__
 #define GL_SILENCE_DEPRECATION
@@ -21,12 +24,10 @@ public:
 	glm::vec4 ClearColor = glm::vec4(0.2f, 0.3f, 0.3f, 1.0f);
 	glm::vec3 ObjectColor = glm::vec3(1.0f, 0.5f, 0.31f);
 	Material material = Material(32);
-	Light light = Light(
-		glm::vec3(1.0f),
-		0.2f,
-		0.5f,
-		1.0f
-	);
+	std::vector<PointLight*> pointLights;
+	DirLight dirLight = DirLight(glm::vec3(1.0f), 0.05f, 0.4f, 0.5f);
+
+	int pointLightCount = 1;
 
 	ImGuiTool(GLFWwindow* context);
 	void init();
@@ -35,5 +36,13 @@ public:
 	void destroy();
 private:
 	GLFWwindow* m_context;
+
+	// 点光源位置
+	std::vector<glm::vec3> pointLightPositions = {
+		glm::vec3(0.7f,  0.2f,  2.0f),
+		glm::vec3(2.3f, -3.3f, -4.0f),
+		glm::vec3(-4.0f,  2.0f, -12.0f),
+		glm::vec3(0.0f,  0.0f, -3.0f)
+	};
 };
 

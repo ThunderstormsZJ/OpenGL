@@ -70,9 +70,6 @@
     <None Include="Shader\light_lamp_FragmentShader.glsl">
       <Filter>资源文件\Shader</Filter>
     </None>
-    <None Include="Shader\light_direction_FragmentShader.glsl">
-      <Filter>资源文件\Shader</Filter>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Shader.h">
@@ -115,6 +112,9 @@
       <Filter>头文件\Common</Filter>
     </ClInclude>
     <ClInclude Include="Templates.h">
+      <Filter>头文件\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils.h">
       <Filter>头文件\Common</Filter>
     </ClInclude>
   </ItemGroup>
