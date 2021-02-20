@@ -4,11 +4,11 @@
 class LightCube: public Cube
 {
 public:
-	LightCube(Light* light, Material* material):Cube(new Shader("Shader/light_VertextShader.glsl", "Shader/light_FragmentShader.glsl")) 
+	LightCube(Light* light, Material* material):Cube(new Shader("Shader/light_VertextShader.glsl", "Shader/light_FragmentShader.glsl"))
 	, m_light(light), m_material(material){
-		setTexture(&material->Diffuse);
-		setTexture(&material->Specular);
-		setTexture(&material->Emission);
+		setTexture(&m_material->Diffuse);
+		setTexture(&m_material->Specular);
+		setTexture(&m_material->Emission);
 	}
 
 	~LightCube() {

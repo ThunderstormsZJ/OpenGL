@@ -146,6 +146,7 @@ public:
 		for (auto begin = textures.begin(); begin != textures.end(); begin++)
 		{
 			m_shader->setInt((*begin)->Name, (*begin)->Index);
+			glActiveTexture(GL_TEXTURE0 + (*begin)->Index); // 激活纹理单元
 			glBindTexture(GL_TEXTURE_2D, (*begin)->Texture);
 		}
 		

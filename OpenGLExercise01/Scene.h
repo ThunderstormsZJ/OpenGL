@@ -34,8 +34,16 @@ public:
 		material.Emission = ImgTexture("", "material.emission", 2);
 
 		// box
-		LightCube* box = new LightCube(&light, &material);
-		addChild(box);
+		for (int i = 0; i < cubePositions.size(); i++)
+		{
+			LightCube* box = new LightCube(&light, &material);
+			box->setPosition(cubePositions[i]);
+			box->setRotate(i * 10, glm::vec3(1, 1, 1));
+			addChild(box);
+		}
+
+		//LightCube* box = new LightCube(&light, &material);
+		//addChild(box);
 	}
 
 	void createTextureCueBox() {
@@ -99,15 +107,15 @@ private:
 	// œ‰◊”Œª÷√
 	std::vector<glm::vec3> cubePositions = {
 		glm::vec3(0.0f,  0.0f,  0.0f),
-		glm::vec3(2.0f,  5.0f, -15.0f),
-	/*	glm::vec3(-1.5f, -2.2f, -2.5f),
-		glm::vec3(-3.8f, -2.0f, -12.3f),
-		glm::vec3(2.4f, -0.4f, -3.5f),
-		glm::vec3(-1.7f,  3.0f, -7.5f),
-		glm::vec3(1.3f, -2.0f, -2.5f),
-		glm::vec3(1.5f,  2.0f, -2.5f),
-		glm::vec3(1.5f,  0.2f, -1.5f),
-		glm::vec3(-1.3f,  1.0f, -1.5f)*/
+		//glm::vec3(2.0f,  5.0f, -15.0f),
+		//glm::vec3(-1.5f, -2.2f, -2.5f),
+		//glm::vec3(-3.8f, -2.0f, -12.3f),
+		//glm::vec3(2.4f, -0.4f, -3.5f),
+		//glm::vec3(-1.7f,  3.0f, -7.5f),
+		//glm::vec3(1.3f, -2.0f, -2.5f),
+		//glm::vec3(1.5f,  2.0f, -2.5f),
+		//glm::vec3(1.5f,  0.2f, -1.5f),
+		//glm::vec3(-1.3f,  1.0f, -1.5f)
 	};
 	
 	//float m_mixValue = 0;
