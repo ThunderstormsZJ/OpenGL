@@ -21,11 +21,14 @@ public:
 	virtual void destroy() = 0;
 	void setName(std::string v) { m_name = v; }
 	std::string getName() { return m_name; }
+	void setTag(std::string v) { m_tag = v; }
+	std::string getTag() { return m_tag; }
 	void setCamera(Camera* camera) { m_camera = camera; }
 	Camera* getCamera() { return m_camera; }
 
 protected:
 	std::string m_name;
+	std::string m_tag;
 	Camera* m_camera;
 
 	// …Ë÷√Œ∆¿Ì

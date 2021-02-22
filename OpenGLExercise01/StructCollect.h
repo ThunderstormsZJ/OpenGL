@@ -41,13 +41,13 @@ struct Material
 };
 
 struct BaseLight {
-	glm::vec3 Color;
+	glm::vec3* Color;
 	bool IsOpen;
 	float Ambient;
 	float Diffuse;
 	float Specular;
 
-	BaseLight(glm::vec3 color, float ambient, float diffuse, float specular):
+	BaseLight(glm::vec3* color, float ambient, float diffuse, float specular):
 		Color(color),
 		Ambient(ambient),
 		Diffuse(diffuse),

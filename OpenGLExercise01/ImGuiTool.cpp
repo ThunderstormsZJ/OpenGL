@@ -19,7 +19,7 @@ void ImGuiTool::init()
 	// init field
 	for (int i = 0; i < NR_POINT_LIGHTS; i++)
 	{
-		PointLight* light = new PointLight(glm::vec3(1.0f), 0.05f, 0.8f, 1.0f);
+		PointLight* light = new PointLight(new glm::vec3(1.0f), 0.05f, 0.8f, 1.0f);
 		light->Position = &pointLightPositions[i];
 		pointLights.push_back(light);
 	}
@@ -56,6 +56,10 @@ void ImGuiTool::render()
 				{
 					if (ImGui::Button("Add Point Light") && pointLightCount < NR_POINT_LIGHTS) {
 						pointLightCount += 1;
+
+						if (pointLightChangeCallback) {
+							pointLightChangeCallback(pointLightCount);
+						}
 					}
 
 					for (int i = 0; i < pointLightCount; i++)
@@ -74,7 +78,7 @@ void ImGuiTool::render()
 
 							ImGui::Separator();
 
-							ImGui::ColorEdit3("Light Color", glm::value_ptr(pointLight->Color));
+							ImGui::ColorEdit3("Light Color", glm::value_ptr(*pointLight->Color));
 							ImGui::SliderFloat("Ambient", &pointLight->Ambient, 0.0f, 1.0f, "ambient(%.2f)");
 							ImGui::SliderFloat("Diffuse", &pointLight->Diffuse, 0.0f, 1.0f, "diffuse(%.2f)");
 							ImGui::SliderFloat("Specular", &pointLight->Specular, 0.0f, 1.0f, "specular(%.2f)");
@@ -95,7 +99,7 @@ void ImGuiTool::render()
 
 					ImGui::Separator();
 
-					ImGui::ColorEdit3("Light Color", glm::value_ptr(dirLight.Color));
+					ImGui::ColorEdit3("Light Color", glm::value_ptr(*dirLight.Color));
 					ImGui::SliderFloat("Ambient", &dirLight.Ambient, 0.0f, 1.0f, "ambient(%.2f)");
 					ImGui::SliderFloat("Diffuse", &dirLight.Diffuse, 0.0f, 1.0f, "diffuse(%.2f)");
 					ImGui::SliderFloat("Specular", &dirLight.Specular, 0.0f, 1.0f, "specular(%.2f)");
@@ -124,4 +128,9 @@ void ImGuiTool::destroy()
 	ImGui_ImplOpenGL3_Shutdown();
 	ImGui_ImplGlfw_Shutdown();
 	ImGui::DestroyContext();
+}
+
+void ImGuiTool::onPointLightChange(std::function<void(int)> callback)
+{
+	pointLightChangeCallback = std::move(callback);
 }

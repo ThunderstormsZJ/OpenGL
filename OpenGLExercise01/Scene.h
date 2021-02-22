@@ -24,14 +24,6 @@ public:
 		DirLight& dirLight = tool->dirLight;
 		dirLight.Direction = new glm::vec3(-0.2f, -1.0f, -0.3f);
 
-		//for (int i = 0; i < tool->pointLight.Count; i++)
-		//{
-		//	Lamp
-		//}
-		/*	m_lamp = new Lamp();
-		m_lamp->setColor(&m_context->tool->light.Color);
-		addChild(m_lamp);*/
-
 		// material
 		Material& material = tool->material;
 		material.Diffuse = ImgTexture("Resources/container2.png", "material.diffuse", 0);
@@ -42,10 +34,23 @@ public:
 		for (int i = 0; i < cubePositions.size(); i++)
 		{
 			LightCube* box = new LightCube(m_context, &material);
-			box->setPosition(cubePositions[i]);
+			box->setPosition(&cubePositions[i]);
 			box->setRotate(i * 10, glm::vec3(1, 1, 1));
 			addChild(box);
 		}
+
+		tool->onPointLightChange([=](int count) {
+			removeChildrenByTag("lamp");
+			for (int i = 0; i < count; i++)
+			{
+				PointLight* light = m_context->tool->pointLights[i];
+				Lamp* lamp = new Lamp();
+				lamp->setTag("lamp");
+				lamp->setColor(light->Color);
+				lamp->setPosition(light->Position);
+				addChild(lamp);
+			}
+		});
 	}
 
 	void createTextureCueBox() {
@@ -57,7 +62,7 @@ public:
 			Cube* cube = new Cube(shader);
 			shader->use();
 			shader->setFloat("mixValue", 0.2f);
-			cube->setPosition(cubePositions[i]);
+			cube->setPosition(&cubePositions[i]);
 			cube->setRotate(i * 10, glm::vec3(1, 1, 1));
 			cube->setTexture("Resources/container.jpg", "texture1", 0);
 			cube->setTexture("Resources/awesomeface.png", "texture2", 1);
@@ -70,6 +75,27 @@ public:
 		m_children.push_back(child);
 	}
 
+	void removeChildrenByTag(std::string tag) {
+		for (auto begin = m_children.begin(); begin != m_children.end();) {
+			if ((*begin)->getTag() == tag) {
+				delete *begin;
+				begin = m_children.erase(begin);
+			}
+			else {
+				++begin;
+			}
+		}
+	}
+	std::vector<Model*> getChildrenByTag(std::string tag) {
+		std::vector<Model*> children;
+		for (const auto &child : m_children) {
+			if (child->getTag() == tag) {
+				children.push_back(child);
+			}
+		}
+
+		return children;
+	}
 	Model* getChildByName(std::string name) {
 		for (auto begin = m_children.begin(); begin != m_children.end(); begin++) 
 		{

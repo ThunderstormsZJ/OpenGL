@@ -82,21 +82,21 @@ public:
 			m_firstMouse = true;
 
 			// 鼠标移动
-			glfwSetCursorPosCallback(window, [](GLFWwindow* window, double xpos, double ypos) {
+			g_PrevUserCallbackPos = glfwSetCursorPosCallback(window, [](GLFWwindow* window, double xpos, double ypos) {
 				auto self = static_cast<Camera*>(glfwGetWindowUserPointer(window));
 				self->mouseEulerMove(xpos, ypos);
 			});
 
 			// 缩放操作
-			glfwSetScrollCallback(window, [](GLFWwindow* window, double xoffset, double yoffset) {
+			g_PrevUserCallbackScroll =  glfwSetScrollCallback(window, [](GLFWwindow* window, double xoffset, double yoffset) {
 				auto self = static_cast<Camera*>(glfwGetWindowUserPointer(window));
 				self->mouseScroll(xoffset, yoffset);
 			});
 		}
 		else {
 			glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
-			glfwSetCursorPosCallback(window, nullptr);
-			glfwSetScrollCallback(window, nullptr);
+			glfwSetCursorPosCallback(window, g_PrevUserCallbackPos);
+			glfwSetScrollCallback(window, g_PrevUserCallbackScroll);
 		}
 		
 	}
@@ -161,4 +161,7 @@ private:
 	glm::vec3 m_cameraRight;
 	float m_cameraFov;
 	glm::vec3 m_worldUp;
+
+	GLFWscrollfun g_PrevUserCallbackScroll = NULL;
+	GLFWcursorposfun g_PrevUserCallbackPos = NULL;
 };

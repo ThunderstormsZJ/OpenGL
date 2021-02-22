@@ -107,6 +107,11 @@ public:
 		glDrawArrays(GL_TRIANGLES, 0, 36);
 	}
 
+	~Cube() {
+		printf("[Log]Delete Cube\n");
+		destroy();
+	}
+
 	void render() {
 		Model::render();
 		//  在循环中绑定是 用于多个物体绘制的情况

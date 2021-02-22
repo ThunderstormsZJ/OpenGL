@@ -2,6 +2,7 @@
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
+#include <functional>
 #include <vector>
 #include <glm.hpp>
 #include <gtc/matrix_transform.hpp>
@@ -25,17 +26,23 @@ public:
 	glm::vec3 ObjectColor = glm::vec3(1.0f, 0.5f, 0.31f);
 	Material material = Material(32);
 	std::vector<PointLight*> pointLights;
-	DirLight dirLight = DirLight(glm::vec3(1.0f), 0.05f, 0.4f, 0.5f);
+	DirLight dirLight = DirLight(new glm::vec3(1.0f), 0.05f, 0.4f, 0.5f);
 
-	int pointLightCount = 1;
+	int pointLightCount = 0;
 
 	ImGuiTool(GLFWwindow* context);
 	void init();
 	void render();
 	void draw();
 	void destroy();
+
+	// callback
+	void onPointLightChange(std::function<void(int)> callback);
 private:
 	GLFWwindow* m_context;
+
+	// callback
+	std::function<void(int)> pointLightChangeCallback;
 
 	// 点光源位置
 	std::vector<glm::vec3> pointLightPositions = {
