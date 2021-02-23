@@ -22,7 +22,29 @@ public:
 
 		// light
 		DirLight& dirLight = tool->dirLight;
+		dirLight.IsOpen = false;
 		dirLight.Direction = new glm::vec3(-0.2f, -1.0f, -0.3f);
+
+		SpotLight& spotLight = tool->spotLight;
+		spotLight.IsOpen = false;
+		spotLight.Position = m_camera->getPPos();
+		// 光照计算是在观察空间计算的，所以相机朝向始终为(0,0,-1)
+		spotLight.Direction = new glm::vec3(0.0f, 0.0f, -1.0f); 
+		spotLight.CutOffRad = glm::radians(12.0f);
+
+		tool->onPointLightChange([=](int count) {
+			removeChildrenByTag("lamp");
+			for (int i = 0; i < count; i++)
+			{
+				PointLight* light = m_context->tool->pointLights[i];
+				Lamp* lamp = new Lamp();
+				lamp->setTag("lamp");
+				lamp->setColor(light->Color);
+				lamp->setPosition(light->Position);
+				addChild(lamp);
+			}
+		});
+
 
 		// material
 		Material& material = tool->material;
@@ -38,19 +60,6 @@ public:
 			box->setRotate(i * 10, glm::vec3(1, 1, 1));
 			addChild(box);
 		}
-
-		tool->onPointLightChange([=](int count) {
-			removeChildrenByTag("lamp");
-			for (int i = 0; i < count; i++)
-			{
-				PointLight* light = m_context->tool->pointLights[i];
-				Lamp* lamp = new Lamp();
-				lamp->setTag("lamp");
-				lamp->setColor(light->Color);
-				lamp->setPosition(light->Position);
-				addChild(lamp);
-			}
-		});
 	}
 
 	void createTextureCueBox() {
@@ -134,6 +143,7 @@ private:
 	// 箱子位置
 	std::vector<glm::vec3> cubePositions = {
 		glm::vec3(0.0f,  0.0f,  0.0f),
+		glm::vec3(0.0f,  0.0f,  5.0f),
 		glm::vec3(2.0f,  5.0f, -15.0f),
 		glm::vec3(-1.5f, -2.2f, -2.5f),
 		glm::vec3(-3.8f, -2.0f, -12.3f),

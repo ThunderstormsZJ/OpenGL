@@ -77,3 +77,18 @@ struct DirLight : public BaseLight
 
 	glm::vec3* Direction;
 };
+
+struct SpotLight: public BaseLight
+{
+	using BaseLight::BaseLight;
+
+	glm::vec3* Position;
+	glm::vec3* Direction;
+	float CutOffRad; // 聚光灯角度
+	float SmoothEdgeIntensity = 5.0f; // 边缘柔化强度
+
+	// 衰减系数
+	float Constant = 1.0f; // 常数项
+	float Linear = 0.09f;  // 一次项
+	float Quadratic = 0.032f; // 二次项
+};

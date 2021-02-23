@@ -27,6 +27,7 @@ public:
 	Material material = Material(32);
 	std::vector<PointLight*> pointLights;
 	DirLight dirLight = DirLight(new glm::vec3(1.0f), 0.05f, 0.4f, 0.5f);
+	SpotLight spotLight = SpotLight(new glm::vec3(1.0f), 0, 1.0f, 1.0f);
 
 	int pointLightCount = 0;
 

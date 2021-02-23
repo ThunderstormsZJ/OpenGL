@@ -105,6 +105,27 @@ void ImGuiTool::render()
 					ImGui::SliderFloat("Specular", &dirLight.Specular, 0.0f, 1.0f, "specular(%.2f)");
 					ImGui::EndTabItem();
 				}
+				if (ImGui::BeginTabItem("SpotLight"))
+				{
+					ImGui::Checkbox("Open", &spotLight.IsOpen);
+					ImGui::Separator();
+
+					ImGui::Text("Position (%.2f, %.2f, %.2f)", spotLight.Position->x, spotLight.Position->y, spotLight.Position->z);
+					ImGui::Text("Direction (%.2f, %.2f, %.2f)", spotLight.Direction->x, spotLight.Direction->y, spotLight.Direction->z);
+					ImGui::SliderAngle("Light CutOff", &spotLight.CutOffRad, 0, 60);
+					ImGui::SliderFloat("Light Smooth Intensity", &spotLight.SmoothEdgeIntensity, 0, 10);
+					ImGui::SliderFloat("Constant", &spotLight.Constant, 0.0f, 1.0f, "constant(%.2f)");
+					ImGui::SliderFloat("Linear", &spotLight.Linear, 0.0f, 1.0f, "linear(%.2f)");
+					ImGui::SliderFloat("Quadratic", &spotLight.Quadratic, 0.0f, 2.0f, "quadratic(%.2f)");
+
+					ImGui::Separator();
+
+					ImGui::ColorEdit3("Light Color", glm::value_ptr(*spotLight.Color));
+					ImGui::SliderFloat("Ambient", &spotLight.Ambient, 0.0f, 1.0f, "ambient(%.2f)");
+					ImGui::SliderFloat("Diffuse", &spotLight.Diffuse, 0.0f, 1.0f, "diffuse(%.2f)");
+					ImGui::SliderFloat("Specular", &spotLight.Specular, 0.0f, 1.0f, "specular(%.2f)");
+					ImGui::EndTabItem();
+				}
 				ImGui::EndTabBar();
 			}
 

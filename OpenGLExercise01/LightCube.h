@@ -50,5 +50,20 @@ private:
 			m_shader->setFloat(name + "linear", pointLight->Linear);
 			m_shader->setFloat(name + "quadratic", pointLight->Quadratic);
 		}
+
+		// ¾Û¹âµÆ
+		SpotLight* spotLight = &m_content->tool->spotLight;
+		m_shader->setBool("spotLight.isOpen", spotLight->IsOpen);
+		m_shader->setVec3("spotLight.position", glm::value_ptr(*spotLight->Position));
+		m_shader->setVec3("spotLight.direction", glm::value_ptr(*spotLight->Direction));
+		m_shader->setFloat("spotLight.cutOff", glm::cos(spotLight->CutOffRad));
+		m_shader->setFloat("spotLight.outerCutOff", glm::cos(spotLight->CutOffRad + glm::radians(spotLight->SmoothEdgeIntensity)));
+		m_shader->setVec3("spotLight.ambient", glm::value_ptr(glm::vec3(spotLight->Ambient) * *spotLight->Color));
+		m_shader->setVec3("spotLight.diffuse", glm::value_ptr(glm::vec3(spotLight->Diffuse) * *spotLight->Color));
+		m_shader->setVec3("spotLight.specular", glm::value_ptr(glm::vec3(spotLight->Specular) * *spotLight->Color));
+
+		m_shader->setFloat("spotLight.constant", spotLight->Constant);
+		m_shader->setFloat("spotLight.linear", spotLight->Linear);
+		m_shader->setFloat("spotLight.quadratic", spotLight->Quadratic);
 	}
 };

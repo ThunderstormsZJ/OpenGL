@@ -18,6 +18,7 @@ public:
 	float getFov() { return m_cameraFov; }
 	glm::vec3 getPos() { return m_cameraPos; }
 	glm::vec3 * getPPos() { return &m_cameraPos; }
+	glm::vec3 * getPFont() { return &m_cameraFont; }
 
 	glm::mat4 getViewMartix() {
 		glm::mat4 viewMartix = glm::lookAt(m_cameraPos, m_cameraPos + m_cameraFont, m_cameraUp);

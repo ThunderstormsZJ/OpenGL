@@ -33,10 +33,28 @@ struct DirLight {
 	vec3 specular;
 };
 
+// 聚光
+struct SpotLight {
+	int isOpen;
+	vec3 position;
+	vec3 direction;
+	float cutOff;
+	float outerCutOff;
+
+	vec3 ambient;
+	vec3 diffuse;
+	vec3 specular;
+
+	float constant;
+	float linear;
+	float quadratic;
+};
+
 uniform Material material;
 uniform DirLight dirLight;
 #define NR_POINT_LIGHTS 4
 uniform PointLight pointLights[NR_POINT_LIGHTS];
+uniform SpotLight spotLight;
 
 //uniform vec3 objectColor;
 //uniform vec3 lightColor;
@@ -55,6 +73,7 @@ in mat4 ViewMat;
 // function prototypes
 vec3 CalcDirLight(DirLight light, vec3 normal, vec3 viewDir);
 vec3 CalcPointLight(PointLight light, vec3 normal, vec3 viewDir);
+vec3 CalcSpotLight(SpotLight light, vec3 normal, vec3 viewDir);
 
 void main(){
 
@@ -72,11 +91,15 @@ void main(){
 		}
 	}
 
+	if (spotLight.isOpen >0){
+		result += CalcSpotLight(spotLight, norm, viewDir);
+	}
+
 	// mession
 	// vec3 mession = texture(material.emission, TexCoord).rgb;
 
 	FragColor = vec4(result, 1);
-}             
+}
 
 // 计算平行光
 vec3 CalcDirLight(DirLight light, vec3 normal, vec3 viewDir){
@@ -109,6 +132,35 @@ vec3 CalcPointLight(PointLight light, vec3 normal, vec3 viewDir){
 	vec3 ambient = light.ambient * texture(material.diffuse, TexCoord).rgb;
 	vec3 diffuse = light.diffuse * diff * texture(material.diffuse, TexCoord).rgb;
 	vec3 specular = light.specular * spec * texture(material.specular, TexCoord).rgb;
+
+	return (ambient + diffuse + specular) * attenuation;
+}
+
+// 聚光灯
+vec3 CalcSpotLight(SpotLight light, vec3 normal, vec3 viewDir){
+	vec3 lightDir = normalize(-FragPos);
+
+	// 计算光照
+	float diff = max(dot(normal, lightDir), 0.0);
+	vec3 reflectDir = reflect(-lightDir, normal);
+	float spec = pow(max(dot(viewDir, reflectDir), 0), material.shininess);
+
+	vec3 ambient = light.ambient * texture(material.diffuse, TexCoord).rgb;
+	vec3 diffuse = light.diffuse * diff * texture(material.diffuse, TexCoord).rgb;
+	vec3 specular = light.specular * spec * texture(material.specular, TexCoord).rgb;
+
+	// 衰减
+	float distance = length(-FragPos);
+	float attenuation = 1 / (light.constant + light.linear * distance + light.quadratic * distance * distance);
+
+	// Smooth Edge
+	float theta = dot(lightDir, normalize(-light.direction));
+	float epsilon = light.cutOff - light.outerCutOff;
+	float intensity = clamp((theta - light.outerCutOff)/epsilon, 0.0, 1.0);
+
+	// 不对环境光做处理
+	diffuse *= intensity;
+	specular *= intensity;
 
 	return (ambient + diffuse + specular) * attenuation;
 }
