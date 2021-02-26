@@ -77,7 +77,6 @@ int main() {
 		// scene
 		scene.update(deltaTime);
 		scene.render(deltaTime);
-		//glDrawElements(GL_TRIANGLES, sizeof(indies), GL_UNSIGNED_INT, 0);
 		
 		guiTool.draw();
 

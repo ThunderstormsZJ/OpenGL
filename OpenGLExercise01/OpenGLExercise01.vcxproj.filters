@@ -25,6 +25,9 @@
     <Filter Include="头文件\Common">
       <UniqueIdentifier>{7e52f9da-9f1f-46f0-97de-e3cb3ceb5773}</UniqueIdentifier>
     </Filter>
+    <Filter Include="源文件\Model">
+      <UniqueIdentifier>{0ceab5a3-43c0-459d-8303-60e6488775b8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -35,6 +38,12 @@
     </ClCompile>
     <ClCompile Include="ImGuiTool.cpp">
       <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Mesh.cpp">
+      <Filter>源文件\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="Model.cpp">
+      <Filter>源文件\Model</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -70,6 +79,12 @@
     <None Include="Shader\light_lamp_FragmentShader.glsl">
       <Filter>资源文件\Shader</Filter>
     </None>
+    <None Include="Shader\model_FragmentShader.glsl">
+      <Filter>资源文件\Shader</Filter>
+    </None>
+    <None Include="Shader\model_VertextShader.glsl">
+      <Filter>资源文件\Shader</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Shader.h">
@@ -96,9 +111,6 @@
     <ClInclude Include="Lamp.h">
       <Filter>头文件\Model</Filter>
     </ClInclude>
-    <ClInclude Include="Model.h">
-      <Filter>头文件\Model</Filter>
-    </ClInclude>
     <ClInclude Include="Transform.h">
       <Filter>头文件\Model</Filter>
     </ClInclude>
@@ -116,6 +128,18 @@
     </ClInclude>
     <ClInclude Include="Utils.h">
       <Filter>头文件\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Mesh.h">
+      <Filter>头文件\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="TransformModel.h">
+      <Filter>头文件\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="Model.h">
+      <Filter>头文件\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="Node.h">
+      <Filter>头文件\Model</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -1,5 +1,5 @@
 #pragma once
-#include "Model.h"
+#include "TransformModel.h"
 #include "StructCollect.h"
 
 #pragma region Vertices
@@ -61,10 +61,10 @@ const float vertices[] = {
 #pragma endregion
 
 // 生成一个正方体
-class Cube:public Model
+class Cube:public TransformModel
 {
 public:
-	Cube(Shader* shader):Model(shader) {
+	Cube(Shader* shader):TransformModel(shader) {
 		m_shader->use();
 		// VAO初始化
 		glGenVertexArrays(1, &VAO);
@@ -113,7 +113,7 @@ public:
 	}
 
 	void render() {
-		Model::render();
+		TransformModel::render();
 		//  在循环中绑定是 用于多个物体绘制的情况
 		glBindVertexArray(VAO);
 		glDrawArrays(GL_TRIANGLES, 0, 36);
@@ -146,7 +146,7 @@ public:
 	}
 
 	void updateShader() {
-		Model::updateShader();
+		TransformModel::updateShader();
 
 		for (auto begin = textures.begin(); begin != textures.end(); begin++)
 		{

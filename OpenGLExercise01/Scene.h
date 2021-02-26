@@ -3,6 +3,7 @@
 #include "Cube.h"
 #include "Lamp.h"
 #include "LightCube.h"
+#include "Model.h"
 
 class Scene
 {
@@ -13,10 +14,17 @@ public:
 		m_camera = new Camera();
 		m_camera->processMouseInput(context->window);
 		
+		createNanosuitModel();
 		//createTextureCueBox();
-		createLightCueBox();
+		//createLightCueBox();
 	}
 
+	void createNanosuitModel() {
+		Shader shader("Shader/model_VertextShader.glsl", "Shader/model_FragmentShader.glsl");
+		Model model( "Resources/nanosuit/nanosuit.obj", shader, m_camera);
+
+		addModel(model);
+	}
 	void createLightCueBox() {
 		ImGuiTool* tool = m_context->tool;
 
@@ -41,7 +49,7 @@ public:
 				lamp->setTag("lamp");
 				lamp->setColor(light->Color);
 				lamp->setPosition(light->Position);
-				addChild(lamp);
+				addTransformModel(lamp);
 			}
 		});
 
@@ -58,10 +66,9 @@ public:
 			LightCube* box = new LightCube(m_context, &material);
 			box->setPosition(&cubePositions[i]);
 			box->setRotate(i * 10, glm::vec3(1, 1, 1));
-			addChild(box);
+			addTransformModel(box);
 		}
 	}
-
 	void createTextureCueBox() {
 		// Shader init
 		Shader* shader = new Shader("Shader/Texture_VertextShader.glsl", "Shader/Texture_FragmentShader.glsl");
@@ -75,29 +82,34 @@ public:
 			cube->setRotate(i * 10, glm::vec3(1, 1, 1));
 			cube->setTexture("Resources/container.jpg", "texture1", 0);
 			cube->setTexture("Resources/awesomeface.png", "texture2", 1);
-			addChild(cube);
+			addTransformModel(cube);
 		}
 	}
 
-	void addChild(Model* child) {
+	// 自定义的模型(箱子)
+	void addTransformModel(TransformModel* child) {
 		child->setCamera(m_camera);
-		m_children.push_back(child);
+		m_childrenTModel.push_back(child);
+	}
+	// 添加外部建模模型
+	void addModel(Model &model) {
+		m_childrenModel.push_back(model);
 	}
 
 	void removeChildrenByTag(std::string tag) {
-		for (auto begin = m_children.begin(); begin != m_children.end();) {
+		for (auto begin = m_childrenTModel.begin(); begin != m_childrenTModel.end();) {
 			if ((*begin)->getTag() == tag) {
 				delete *begin;
-				begin = m_children.erase(begin);
+				begin = m_childrenTModel.erase(begin);
 			}
 			else {
 				++begin;
 			}
 		}
 	}
-	std::vector<Model*> getChildrenByTag(std::string tag) {
-		std::vector<Model*> children;
-		for (const auto &child : m_children) {
+	std::vector<TransformModel*> getChildrenByTag(std::string tag) {
+		std::vector<TransformModel*> children;
+		for (const auto &child : m_childrenTModel) {
 			if (child->getTag() == tag) {
 				children.push_back(child);
 			}
@@ -105,8 +117,8 @@ public:
 
 		return children;
 	}
-	Model* getChildByName(std::string name) {
-		for (auto begin = m_children.begin(); begin != m_children.end(); begin++) 
+	TransformModel* getChildByName(std::string name) {
+		for (auto begin = m_childrenTModel.begin(); begin != m_childrenTModel.end(); begin++) 
 		{
 			if ((*begin)->getName() == name) {
 				return (*begin);
@@ -117,19 +129,24 @@ public:
 	void render(float deltaTime) {
 		m_camera->processInput(m_context->window, deltaTime);
 
-		for (auto begin = m_children.begin(); begin != m_children.end(); begin++)
+		for (auto begin = m_childrenTModel.begin(); begin != m_childrenTModel.end(); begin++)
 		{
 			(*begin)->render();
+		}		
+		
+		for (auto begin = m_childrenModel.begin(); begin != m_childrenModel.end(); begin++)
+		{
+			(*begin).Render();
 		}
 	}
 	void update(float delataTime) {
-		for (auto begin = m_children.begin(); begin != m_children.end(); begin++)
+		for (auto begin = m_childrenTModel.begin(); begin != m_childrenTModel.end(); begin++)
 		{
 			(*begin)->update(delataTime);
 		}
 	}
 	void destory() {
-		for (auto begin = m_children.begin();begin!=m_children.end();begin++)
+		for (auto begin = m_childrenTModel.begin();begin!=m_childrenTModel.end();begin++)
 		{
 			(*begin)->destroy();
 		}
@@ -138,7 +155,8 @@ public:
 private:
 	WindowContext* m_context;
 	Camera* m_camera;
-	std::vector<Model*> m_children;
+	std::vector<TransformModel*> m_childrenTModel;
+	std::vector<Model> m_childrenModel;
 
 	// 箱子位置
 	std::vector<glm::vec3> cubePositions = {

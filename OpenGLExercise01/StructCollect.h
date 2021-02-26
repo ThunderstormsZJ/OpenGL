@@ -1,5 +1,17 @@
 #pragma once
 #include <string>
+#include "glm.hpp"
+
+struct Vertex {
+	glm::vec3 Position; // 顶点坐标
+	glm::vec3 Normal; // 顶点法向量
+	glm::vec2 TexCoords; // 纹理坐标
+};
+
+struct Texture {
+	unsigned int Id; // 纹理ID
+	std::string Type; // 纹理类型
+};
 
 struct ImgTexture {
 	std::string ImgPath; // 图片路径
