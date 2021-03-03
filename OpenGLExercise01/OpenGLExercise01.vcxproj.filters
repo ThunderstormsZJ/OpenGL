@@ -85,6 +85,7 @@
     <None Include="Shader\model_VertextShader.glsl">
       <Filter>资源文件\Shader</Filter>
     </None>
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Shader.h">
@@ -108,15 +109,6 @@
     <ClInclude Include="Cube.h">
       <Filter>头文件\Model</Filter>
     </ClInclude>
-    <ClInclude Include="Lamp.h">
-      <Filter>头文件\Model</Filter>
-    </ClInclude>
-    <ClInclude Include="Transform.h">
-      <Filter>头文件\Model</Filter>
-    </ClInclude>
-    <ClInclude Include="LightCube.h">
-      <Filter>头文件\Model</Filter>
-    </ClInclude>
     <ClInclude Include="StructCollect.h">
       <Filter>头文件\Common</Filter>
     </ClInclude>
@@ -132,14 +124,14 @@
     <ClInclude Include="Mesh.h">
       <Filter>头文件\Model</Filter>
     </ClInclude>
-    <ClInclude Include="TransformModel.h">
-      <Filter>头文件\Model</Filter>
-    </ClInclude>
     <ClInclude Include="Model.h">
       <Filter>头文件\Model</Filter>
     </ClInclude>
     <ClInclude Include="Node.h">
       <Filter>头文件\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="Director.h">
+      <Filter>头文件\Common</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -1,12 +1,4 @@
-#define GLEW_STATIC
-#include <GL/glew.h>
-#include <GLFW/glfw3.h>
-
-//通过定义STB_IMAGE_IMPLEMENTATION，预处理器会修改头文件，让其只包含相关的函数定义源码，等于是将这个头文件变为一个 .cpp 文件了。
-#define STB_IMAGE_IMPLEMENTATION
-#include "ImGuiTool.h"
 #include "Main.h"
-#include "Scene.h"
 
 // 时间差
 float deltaTime = 0.0f;
@@ -54,22 +46,23 @@ int main() {
 	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);	// 框线模式
 
 	ImGuiTool guiTool(window);
-	WindowContext context;
-	context.window = window;
-	context.tool = &guiTool;
-
+	Camera camera;
+	camera.processMouseInput(window);
+	Director::GetInstance().Init(window, &camera);
+	
 	// Scene
-	Scene scene(&context);
+	Scene scene(guiTool);
 
 	// GL 是从从左到右， 从上到下的逐个像素绘制
 	while (!glfwWindowShouldClose(window))
 	{
-		guiTool.render();
-
 		// time
 		float currentFrame = glfwGetTime();
 		deltaTime = currentFrame - lastFrame;
 		lastFrame = currentFrame;
+
+		camera.processInput(window, deltaTime);
+		guiTool.render();
 
 		glClearColor(guiTool.ClearColor.x, guiTool.ClearColor.y, guiTool.ClearColor.z, guiTool.ClearColor.w);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

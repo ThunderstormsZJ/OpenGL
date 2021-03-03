@@ -11,71 +11,27 @@ struct Vertex {
 struct Texture {
 	unsigned int Id; // 纹理ID
 	std::string Type; // 纹理类型
-};
-
-struct ImgTexture {
-	std::string ImgPath; // 图片路径
-	std::string Name; // shader对应名称
-	int Index; // shader对应位置
-	unsigned int Texture; // 图片位置
-
-	ImgTexture() {}
-	ImgTexture(std::string imgPath, std::string name, int index) :
-		ImgPath(imgPath),
-		Name(name),
-		Index(index)
-	{
-	}
-
-
-	~ImgTexture() {
-
-	}
+	std::string Name; // 纹理名称
 };
 
 struct Material
 {
-	ImgTexture Diffuse;
-	ImgTexture Specular;
-	ImgTexture Emission;
-	int Shininess;
-
-	Material() {}
-	Material(int shininess) :
-		Shininess(shininess)
-	{
-	}
-
-
-	~Material() {
-
-	}
+	int Shininess = 2;
 };
 
 struct BaseLight {
-	glm::vec3* Color;
-	bool IsOpen;
+	glm::vec3 Color = glm::vec3(1.0f);
+	bool IsOpen = false;
 	float Ambient;
 	float Diffuse;
 	float Specular;
-
-	BaseLight(glm::vec3* color, float ambient, float diffuse, float specular):
-		Color(color),
-		Ambient(ambient),
-		Diffuse(diffuse),
-		Specular(specular),
-		IsOpen(true)
-	{
-	}
-	
-	~BaseLight(){}
 };
 
 struct PointLight: public BaseLight
 {
 	using BaseLight::BaseLight;
 
-	glm::vec3* Position;
+	glm::vec3 Position;
 
 	// 衰减系数
 	float Constant = 1.0f; // 常数项
@@ -87,15 +43,15 @@ struct DirLight : public BaseLight
 {
 	using BaseLight::BaseLight;
 
-	glm::vec3* Direction;
+	glm::vec3 Direction;
 };
 
 struct SpotLight: public BaseLight
 {
 	using BaseLight::BaseLight;
 
-	glm::vec3* Position;
-	glm::vec3* Direction;
+	glm::vec3 Position;
+	glm::vec3 Direction;
 	float CutOffRad; // 聚光灯角度
 	float SmoothEdgeIntensity = 5.0f; // 边缘柔化强度
 

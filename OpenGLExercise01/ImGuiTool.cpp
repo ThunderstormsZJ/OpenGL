@@ -15,14 +15,6 @@ void ImGuiTool::init()
 	// Bind OpenGL And Init
 	ImGui_ImplGlfw_InitForOpenGL(m_context, true);
 	ImGui_ImplOpenGL3_Init();
-
-	// init field
-	for (int i = 0; i < NR_POINT_LIGHTS; i++)
-	{
-		PointLight* light = new PointLight(new glm::vec3(1.0f), 0.05f, 0.8f, 1.0f);
-		light->Position = &pointLightPositions[i];
-		pointLights.push_back(light);
-	}
 }
 
 void ImGuiTool::render()
@@ -40,13 +32,12 @@ void ImGuiTool::render()
 			ImGui::ColorEdit4("Clear Color", glm::value_ptr(ClearColor));
 		}
 
-		if (ImGui::CollapsingHeader("Model Config")) {
-			ImGui::ColorEdit3("Model Color", glm::value_ptr(ObjectColor));
-			if (ImGui::TreeNode("Material"))
-			{
-				ImGui::SliderInt("Shininess", &material.Shininess, 4, 248);
-				ImGui::TreePop();
-			}
+		if (ImGui::CollapsingHeader("Cube Config")) {
+			ImGui::ColorEdit3("Color", glm::value_ptr(ObjectColor));
+		}
+
+		if (ImGui::CollapsingHeader("Material Config")) {
+			ImGui::SliderInt("Shininess", &material.Shininess, 4, 248);
 		}
 
 		if (ImGui::CollapsingHeader("Light Config")) {
@@ -54,6 +45,7 @@ void ImGuiTool::render()
 			{
 				if (ImGui::BeginTabItem("PointLight"))
 				{
+					std::vector<PointLight>* pointLights = Director::GetInstance().GetPPointLights();
 					if (ImGui::Button("Add Point Light") && pointLightCount < NR_POINT_LIGHTS) {
 						pointLightCount += 1;
 
@@ -66,19 +58,19 @@ void ImGuiTool::render()
 					{
 						char label[32]; sprintf_s(label, "Point Light[%d]", i + 1);
 						if (ImGui::TreeNode(label)) {
-							PointLight* pointLight = pointLights[i];
+							PointLight* pointLight = &pointLights->at(i);
 							ImGui::Checkbox("Open", &pointLight->IsOpen);
 
 							ImGui::Separator();
 
-							ImGui::SliderFloat3("Light Position", glm::value_ptr(*pointLight->Position), -1, 1);
+							ImGui::SliderFloat3("Light Position", glm::value_ptr(pointLight->Position), -1, 1);
 							ImGui::SliderFloat("Constant", &pointLight->Constant, 0.0f, 1.0f, "constant(%.2f)");
 							ImGui::SliderFloat("Linear", &pointLight->Linear, 0.0f, 1.0f, "linear(%.2f)");
 							ImGui::SliderFloat("Quadratic", &pointLight->Quadratic, 0.0f, 2.0f, "quadratic(%.2f)");
 
 							ImGui::Separator();
 
-							ImGui::ColorEdit3("Light Color", glm::value_ptr(*pointLight->Color));
+							ImGui::ColorEdit3("Light Color", glm::value_ptr(pointLight->Color));
 							ImGui::SliderFloat("Ambient", &pointLight->Ambient, 0.0f, 1.0f, "ambient(%.2f)");
 							ImGui::SliderFloat("Diffuse", &pointLight->Diffuse, 0.0f, 1.0f, "diffuse(%.2f)");
 							ImGui::SliderFloat("Specular", &pointLight->Specular, 0.0f, 1.0f, "specular(%.2f)");
@@ -92,38 +84,42 @@ void ImGuiTool::render()
 				}
 				if (ImGui::BeginTabItem("DirLight"))
 				{
-					ImGui::Checkbox("Open", &dirLight.IsOpen);
+					DirLight* dirLight = Director::GetInstance().GetPDirLight();
+					ImGui::Checkbox("Open", &dirLight->IsOpen);
 					ImGui::Separator();
 
-					ImGui::SliderFloat3("Light Direction", glm::value_ptr(*dirLight.Direction), -1, 1);
+					ImGui::SliderFloat3("Light Direction", glm::value_ptr(dirLight->Direction), -1, 1);
 
 					ImGui::Separator();
 
-					ImGui::ColorEdit3("Light Color", glm::value_ptr(*dirLight.Color));
-					ImGui::SliderFloat("Ambient", &dirLight.Ambient, 0.0f, 1.0f, "ambient(%.2f)");
-					ImGui::SliderFloat("Diffuse", &dirLight.Diffuse, 0.0f, 1.0f, "diffuse(%.2f)");
-					ImGui::SliderFloat("Specular", &dirLight.Specular, 0.0f, 1.0f, "specular(%.2f)");
+					ImGui::ColorEdit3("Light Color", glm::value_ptr(dirLight->Color));
+					ImGui::SliderFloat("Ambient", &dirLight->Ambient, 0.0f, 1.0f, "ambient(%.2f)");
+					ImGui::SliderFloat("Diffuse", &dirLight->Diffuse, 0.0f, 1.0f, "diffuse(%.2f)");
+					ImGui::SliderFloat("Specular", &dirLight->Specular, 0.0f, 1.0f, "specular(%.2f)");
 					ImGui::EndTabItem();
 				}
 				if (ImGui::BeginTabItem("SpotLight"))
 				{
-					ImGui::Checkbox("Open", &spotLight.IsOpen);
+					SpotLight* spotLight = Director::GetInstance().GetPSpotLight();
+					Camera* camera = Director::GetInstance().MainCamera;
+					ImGui::Checkbox("Open", &spotLight->IsOpen);
 					ImGui::Separator();
 
-					ImGui::Text("Position (%.2f, %.2f, %.2f)", spotLight.Position->x, spotLight.Position->y, spotLight.Position->z);
-					ImGui::Text("Direction (%.2f, %.2f, %.2f)", spotLight.Direction->x, spotLight.Direction->y, spotLight.Direction->z);
-					ImGui::SliderAngle("Light CutOff", &spotLight.CutOffRad, 0, 60);
-					ImGui::SliderFloat("Light Smooth Intensity", &spotLight.SmoothEdgeIntensity, 0, 10);
-					ImGui::SliderFloat("Constant", &spotLight.Constant, 0.0f, 1.0f, "constant(%.2f)");
-					ImGui::SliderFloat("Linear", &spotLight.Linear, 0.0f, 1.0f, "linear(%.2f)");
-					ImGui::SliderFloat("Quadratic", &spotLight.Quadratic, 0.0f, 2.0f, "quadratic(%.2f)");
+					spotLight->Position = camera->getPos(); // update spotLight position
+					ImGui::Text("Position (%.2f, %.2f, %.2f)", spotLight->Position.x, spotLight->Position.y, spotLight->Position.z);
+					ImGui::Text("Direction (%.2f, %.2f, %.2f)", spotLight->Direction.x, spotLight->Direction.y, spotLight->Direction.z);
+					ImGui::SliderAngle("Light CutOff", &spotLight->CutOffRad, 0, 60);
+					ImGui::SliderFloat("Light Smooth Intensity", &spotLight->SmoothEdgeIntensity, 0, 10);
+					ImGui::SliderFloat("Constant", &spotLight->Constant, 0.0f, 1.0f, "constant(%.2f)");
+					ImGui::SliderFloat("Linear", &spotLight->Linear, 0.0f, 1.0f, "linear(%.2f)");
+					ImGui::SliderFloat("Quadratic", &spotLight->Quadratic, 0.0f, 2.0f, "quadratic(%.2f)");
 
 					ImGui::Separator();
 
-					ImGui::ColorEdit3("Light Color", glm::value_ptr(*spotLight.Color));
-					ImGui::SliderFloat("Ambient", &spotLight.Ambient, 0.0f, 1.0f, "ambient(%.2f)");
-					ImGui::SliderFloat("Diffuse", &spotLight.Diffuse, 0.0f, 1.0f, "diffuse(%.2f)");
-					ImGui::SliderFloat("Specular", &spotLight.Specular, 0.0f, 1.0f, "specular(%.2f)");
+					ImGui::ColorEdit3("Light Color", glm::value_ptr(spotLight->Color));
+					ImGui::SliderFloat("Ambient", &spotLight->Ambient, 0.0f, 1.0f, "ambient(%.2f)");
+					ImGui::SliderFloat("Diffuse", &spotLight->Diffuse, 0.0f, 1.0f, "diffuse(%.2f)");
+					ImGui::SliderFloat("Specular", &spotLight->Specular, 0.0f, 1.0f, "specular(%.2f)");
 					ImGui::EndTabItem();
 				}
 				ImGui::EndTabBar();

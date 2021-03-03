@@ -58,7 +58,7 @@ public:
 		// µã»÷²Ù×÷
 		glfwSetMouseButtonCallback(window, [](GLFWwindow* window, int button, int action, int mods) {
 			auto self = static_cast<Camera*>(glfwGetWindowUserPointer(window));
-			if ((action == GLFW_PRESS) & mods == GLFW_MOD_CONTROL) switch (button)
+			if (action == GLFW_PRESS & mods == GLFW_MOD_CONTROL) switch (button)
 			{
 			case GLFW_MOUSE_BUTTON_LEFT:
 				self->openMouseOperate(window, true);

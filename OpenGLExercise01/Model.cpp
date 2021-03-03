@@ -1,29 +1,26 @@
 #include "Model.h"
 
-Model::Model(std::string path, Shader &shader, Camera* camera)
-	:shader(shader)
+Model::Model(std::string path, Shader& shader):Node(shader)
 {
-	shader.use();
-	this->camera = camera;
 	loadModel(path);
 }
 
 void Model::Render()
 {
-	glm::mat4 model = glm::mat4(1.0f);
-	model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f)); // translate it down so it's at the center of the scene
-	model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));	// it's a bit too big for our scene, so scale it down
-	glm::mat4 projection = glm::perspective(glm::radians(camera->getFov()), (float)WINDOW_WIDTH / (float)WINDOW_HEIGHT, 0.1f, 100.0f);
-	glm::mat4 view = camera->getViewMartix();
-
-	shader.setMat("model", glm::value_ptr(model)); // 模型矩阵
-	shader.setMat("projection", glm::value_ptr(projection)); // 透视矩阵
-	shader.setMat("view", glm::value_ptr(view)); // 观察矩阵
+	Node::Render();
 
 	for (unsigned int i = 0; i < meshes.size(); i++)
 	{
 		meshes[i].Draw(shader);
 	}
+}
+
+void Model::Destroy()
+{
+}
+
+void Model::Update(float delataTime)
+{
 }
 
 void Model::loadModel(std::string path)
