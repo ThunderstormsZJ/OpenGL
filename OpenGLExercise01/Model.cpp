@@ -128,12 +128,24 @@ std::vector<Texture> Model::loadMaterialTextures(aiMaterial* mat, aiTextureType 
 		// 网上的某些模型可能是绝对路径，这需要额外处理
 		aiString path;
 		mat->GetTexture(type, i, &path);
-		
-		Texture texture;
-		texture.Type = typeName;
-		texture.Id = ImgCache::GetInstance().addTexture(directory + "/" + path.C_Str());
+		bool skip = false;
+		for (unsigned int i = 0; i < textures_loaded.size(); i++)
+		{
+			if (std::strcmp(textures_loaded[i].Path.data(), path.C_Str()) == 0) {// 纹理存在
+				textures.push_back(textures_loaded[i]);
+				skip = true;
+				break;
+			}
+		}
 
-		textures.push_back(texture);
+		if (!skip) { // 创建一个纹理
+			Texture texture;
+			texture.Type = typeName;
+			texture.Id = ImgCache::GetInstance().addTexture(directory + "/" + path.C_Str());
+			texture.Path = path.C_Str();
+			textures.push_back(texture);
+			textures_loaded.push_back(texture);
+		}
 	}
 
 	return textures;

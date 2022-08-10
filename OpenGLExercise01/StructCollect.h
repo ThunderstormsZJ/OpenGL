@@ -12,6 +12,7 @@ struct Texture {
 	unsigned int Id; // 纹理ID
 	std::string Type; // 纹理类型
 	std::string Name; // 纹理名称
+	std::string Path; // 纹理路径
 };
 
 struct Material

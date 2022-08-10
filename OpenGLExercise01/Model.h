@@ -21,6 +21,7 @@ public:
 private:
 	std::vector<Mesh> meshes;
 	std::string directory;
+	std::vector<Texture> textures_loaded; // 已经加载的模型贴图，防止重新加载
 
 	void loadModel(std::string path);
 	void processNode(aiNode *node, const aiScene *scene);
