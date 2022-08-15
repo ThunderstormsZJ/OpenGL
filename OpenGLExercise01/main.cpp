@@ -1,4 +1,5 @@
 #include "Main.h"
+#include "Utils/OpenGLCommonAPI.h"
 
 // 时间差
 float deltaTime = 0.0f;
@@ -44,6 +45,8 @@ int main() {
 	//glCullFace(GL_FRONT);  // GL_BACK：只剔除背面 GL_FRONT：只剔除正面 GL_FRONT_AND_BACK：剔除背面和正面
 	//glFrontFace(GL_CCW); // GL_CCW: 逆时针 GL_CW: 顺时针 （默认逆时针）
 	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);	// 框线模式
+	
+	OpenGLCommonAPI::PrintSupportExtensions();
 
 	ImGuiTool guiTool(window);
 	Camera camera;
@@ -52,6 +55,7 @@ int main() {
 	
 	// Scene
 	Scene scene(guiTool);
+
 
 	// GL 是从从左到右， 从上到下的逐个像素绘制
 	while (!glfwWindowShouldClose(window))

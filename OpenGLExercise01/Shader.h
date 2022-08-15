@@ -26,7 +26,7 @@ private:
 	const char*  fragmentSource;
 	unsigned int shaderProgramID;
 
-	void checkCompileErrors(unsigned int ID, std::string type);
+	void checkProgramErrors(unsigned int ID);
 };
 
 template <class T>
