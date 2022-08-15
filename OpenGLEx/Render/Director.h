@@ -1,8 +1,9 @@
 #pragma once
 #include <GLFW\glfw3.h>
-#include "Templates.h"
 #include "Camera.h"
-#include "Utils.h"
+#include "../Common/Templates.h"
+#include "../Common/StructCollect.h"
+#include "../Utils/Tools.hpp"
 
 #define NR_POINT_LIGHTS 4
 

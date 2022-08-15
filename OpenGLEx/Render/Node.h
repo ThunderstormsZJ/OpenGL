@@ -1,7 +1,7 @@
 #pragma once
 #include "Director.h"
 #include "Shader.h"
-#include "Utils/Logger.hpp"
+#include "../Utils/Logger.hpp"
 
 class Node
 {

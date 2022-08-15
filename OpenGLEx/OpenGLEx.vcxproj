@@ -23,6 +23,7 @@
     <ProjectGuid>{0B87C05C-6DEC-45FC-87A7-1FCD775FBE7D}</ProjectGuid>
     <RootNamespace>OpenGLExercise01</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>OpenGLEx</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -91,10 +92,10 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>D:\GitHub\OpenGLLib\imgui;D:\GitHub\OpenGLLib\glm\glm;D:\GitHub\OpenGLLib\glfw-3.3.3.bin.WIN64\include;D:\GitHub\OpenGLLib\glew-2.1.0\include;D:\GitHub\OpenGLLib\assimp\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\OpenGLLib\imgui;..\..\OpenGLLib\glm\glm;..\..\OpenGLLib\glfw-3.3.3.bin.WIN64\include;..\..\OpenGLLib\glew-2.1.0\include;..\..\OpenGLLib\assimp\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>D:\GitHub\OpenGL\x64\Debug;D:\GitHub\OpenGLLib\glfw-3.3.3.bin.WIN64\lib-vc2019;D:\GitHub\OpenGLLib\glew-2.1.0\lib\Release\x64;D:\GitHub\OpenGLLib\assimp\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\x64\Debug;..\..\OpenGLLib\glfw-3.3.3.bin.WIN64\lib-vc2019;..\..\OpenGLLib\glew-2.1.0\lib\Release\x64;..\..\OpenGLLib\assimp\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>opengl32.lib;glfw3.lib;glew32s.lib;Imgui.lib;assimp-vc140-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -127,11 +128,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="ImGuiTool.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Mesh.cpp" />
-    <ClCompile Include="Model.cpp" />
-    <ClCompile Include="Shader.cpp" />
+    <ClCompile Include="Render\Mesh.cpp" />
+    <ClCompile Include="Render\Model.cpp" />
+    <ClCompile Include="Render\Shader.cpp" />
+    <ClCompile Include="Utils\ImGuiTool.cpp" />
+    <ClCompile Include="Utils\OpenGLCommonAPI.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Resources\awesomeface.png" />
@@ -142,6 +144,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="Shader\common_light_FragmentShader.glsl" />
     <None Include="Shader\light_FragmentShader.glsl" />
     <None Include="Shader\light_lamp_FragmentShader.glsl" />
     <None Include="Shader\light_VertextShader.glsl" />
@@ -151,21 +154,24 @@
     <None Include="Shader\Texture_VertextShader.glsl" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Camera.h" />
-    <ClInclude Include="Cube.h" />
-    <ClInclude Include="Director.h" />
-    <ClInclude Include="ImgCache.h" />
-    <ClInclude Include="ImGuiTool.h" />
+    <ClInclude Include="Common\StructCollect.h" />
+    <ClInclude Include="Common\Templates.h" />
     <ClInclude Include="Main.h" />
-    <ClInclude Include="Mesh.h" />
-    <ClInclude Include="Model.h" />
-    <ClInclude Include="Node.h" />
-    <ClInclude Include="Scene.h" />
-    <ClInclude Include="Shader.h" />
+    <ClInclude Include="Render\Camera.h" />
+    <ClInclude Include="Render\Cube.h" />
+    <ClInclude Include="Render\Director.h" />
+    <ClInclude Include="Render\Mesh.h" />
+    <ClInclude Include="Render\Model.h" />
+    <ClInclude Include="Render\Node.h" />
+    <ClInclude Include="Render\Scene.h" />
+    <ClInclude Include="Render\Shader.h" />
     <ClInclude Include="stb_image.h" />
-    <ClInclude Include="StructCollect.h" />
-    <ClInclude Include="Templates.h" />
-    <ClInclude Include="Utils.h" />
+    <ClInclude Include="Utils\ImgCache.hpp" />
+    <ClInclude Include="Utils\ImGuiTool.h" />
+    <ClInclude Include="Utils\Logger.hpp" />
+    <ClInclude Include="Utils\OpenGLCommonAPI.h" />
+    <ClInclude Include="Utils\ShaderLoader.hpp" />
+    <ClInclude Include="Utils\Tools.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

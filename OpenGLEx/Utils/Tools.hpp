@@ -1,6 +1,5 @@
 #pragma once
 #include <string>
-#include "Templates.h"
 #include <cstdarg>
 
 //missing string printf

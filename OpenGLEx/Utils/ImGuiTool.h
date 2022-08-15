@@ -7,8 +7,8 @@
 #include <glm.hpp>
 #include <gtc/matrix_transform.hpp>
 #include <gtc/type_ptr.hpp>
-#include "StructCollect.h"
-#include "Director.h"
+#include "../Common/StructCollect.h"
+#include "../Render/Director.h"
 
 #ifdef __APPLE__
 #define GL_SILENCE_DEPRECATION

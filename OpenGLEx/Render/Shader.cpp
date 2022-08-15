@@ -1,5 +1,5 @@
 #include "Shader.h"
-#include "Utils/ShaderLoader.hpp"
+#include "../Utils/ShaderLoader.hpp"
 
 using namespace std;
 using namespace Utils;

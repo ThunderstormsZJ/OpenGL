@@ -1,0 +1,158 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="Utils\OpenGLCommonAPI.cpp">
+      <Filter>源文件\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Render\Mesh.cpp">
+      <Filter>源文件\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="Render\Model.cpp">
+      <Filter>源文件\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="Render\Shader.cpp">
+      <Filter>源文件\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Utils\ImGuiTool.cpp">
+      <Filter>源文件\Utils</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Utils\ImgCache.hpp">
+      <Filter>头文件\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\Logger.hpp">
+      <Filter>头文件\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\OpenGLCommonAPI.h">
+      <Filter>头文件\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\ShaderLoader.hpp">
+      <Filter>头文件\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Render\Camera.h">
+      <Filter>头文件\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="Render\Cube.h">
+      <Filter>头文件\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="Render\Director.h">
+      <Filter>头文件\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="Render\Mesh.h">
+      <Filter>头文件\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="Render\Model.h">
+      <Filter>头文件\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="Render\Node.h">
+      <Filter>头文件\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="Render\Scene.h">
+      <Filter>头文件\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="Render\Shader.h">
+      <Filter>头文件\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\StructCollect.h">
+      <Filter>头文件\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\Templates.h">
+      <Filter>头文件\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Main.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="stb_image.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\Tools.hpp">
+      <Filter>头文件\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\ImGuiTool.h">
+      <Filter>头文件\Utils</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Resources\awesomeface.png">
+      <Filter>资源文件\Resources</Filter>
+    </Image>
+    <Image Include="Resources\container.jpg">
+      <Filter>资源文件\Resources</Filter>
+    </Image>
+    <Image Include="Resources\container2.png">
+      <Filter>资源文件\Resources</Filter>
+    </Image>
+    <Image Include="Resources\container2_specular.png">
+      <Filter>资源文件\Resources</Filter>
+    </Image>
+    <Image Include="Resources\matrix.jpg">
+      <Filter>资源文件\Resources</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+    <None Include="Shader\light_FragmentShader.glsl">
+      <Filter>资源文件\Shader</Filter>
+    </None>
+    <None Include="Shader\light_lamp_FragmentShader.glsl">
+      <Filter>资源文件\Shader</Filter>
+    </None>
+    <None Include="Shader\light_VertextShader.glsl">
+      <Filter>资源文件\Shader</Filter>
+    </None>
+    <None Include="Shader\model_FragmentShader.glsl">
+      <Filter>资源文件\Shader</Filter>
+    </None>
+    <None Include="Shader\model_VertextShader.glsl">
+      <Filter>资源文件\Shader</Filter>
+    </None>
+    <None Include="Shader\Texture_VertextShader.glsl">
+      <Filter>资源文件\Shader</Filter>
+    </None>
+    <None Include="Shader\Texture_FragmentShader.glsl">
+      <Filter>资源文件\Shader</Filter>
+    </None>
+    <None Include="Shader\common_light_FragmentShader.glsl">
+      <Filter>资源文件\Shader</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="资源文件">
+      <UniqueIdentifier>{bdfc606b-66bc-4c38-b2ad-42b4fe007c6a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="资源文件\Resources">
+      <UniqueIdentifier>{5ed06657-aa38-4d29-858f-3a46f44f79e5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="资源文件\Shader">
+      <UniqueIdentifier>{35f7f358-c706-47cd-9341-1c45c2d45769}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件">
+      <UniqueIdentifier>{af8e805f-4d61-4eb8-bbb5-2dc23f5105bb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\Utils">
+      <UniqueIdentifier>{2f89352a-8fd8-4804-a7f2-e516938b4796}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\Render">
+      <UniqueIdentifier>{c076fb39-313b-4a21-807a-6e156e01de24}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\Common">
+      <UniqueIdentifier>{873c6882-713e-44cd-a948-ac2b43ce548d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件">
+      <UniqueIdentifier>{feca0794-338a-4788-9c9b-2dcd367542c0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\Utils">
+      <UniqueIdentifier>{6695fa42-d465-42b5-a9e3-dc2a27d46955}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\Render">
+      <UniqueIdentifier>{caf4dca9-0436-4010-8b05-b7d037dac620}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\Common">
+      <UniqueIdentifier>{b648a2d5-6cb1-4e0f-be68-8ed38c13fb97}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

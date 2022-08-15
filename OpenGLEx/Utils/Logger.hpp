@@ -1,5 +1,5 @@
 #pragma once
-#include "../Templates.h"
+#include "../Common/Templates.h"
 #include <cstdarg>
 #include <spdlog/spdlog.h>
 #include <spdlog/sinks/stdout_color_sinks.h>

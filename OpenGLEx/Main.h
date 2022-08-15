@@ -11,9 +11,9 @@
 #include <gtc/matrix_transform.hpp>
 #include <gtc/type_ptr.hpp>
 
-#include "ImGuiTool.h"
-#include "Scene.h"
-#include "Director.h"
+#include "Utils/ImGuiTool.h"
+#include "Render/Scene.h"
+#include "Render/Director.h"
 
 class Main
 {

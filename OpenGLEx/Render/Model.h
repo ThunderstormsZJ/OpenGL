@@ -7,7 +7,7 @@
 #include "Mesh.h"
 #include "Camera.h"
 #include "Node.h"
-#include "Utils/ImgCache.hpp"
+#include "../Utils/ImgCache.hpp"
 #include "Director.h"
 
 class Model: public Node

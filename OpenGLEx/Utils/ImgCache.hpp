@@ -1,6 +1,6 @@
 #pragma once
 #include "../stb_image.h"
-#include "../Templates.h"
+#include "../Common/Templates.h"
 #include <string>
 #include <map>
 

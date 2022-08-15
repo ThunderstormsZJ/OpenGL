@@ -1,7 +1,7 @@
 #pragma once
 #include <vector>
 #include "Shader.h"
-#include "StructCollect.h"
+#include "../Common/StructCollect.h"
 
 class Mesh
 {

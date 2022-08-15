@@ -1,7 +1,7 @@
 #pragma once
 #include "Node.h"
-#include "StructCollect.h"
-#include "Utils/ImgCache.hpp"
+#include "../Common/StructCollect.h"
+#include "../Utils/ImgCache.hpp"
 
 #pragma region Vertices
 const float vertices[] = {
