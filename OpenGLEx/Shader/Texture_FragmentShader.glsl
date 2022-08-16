@@ -12,6 +12,17 @@ uniform sampler2D texture1;
 uniform sampler2D texture2;
 uniform float mixValue;
 
+// 深度测试线性变换
+float near = 0.1; 
+float far  = 100.0; 
+
+float LinearizeDepth(float depth) 
+{
+    float z = depth * 2.0 - 1.0; // back to NDC 
+    return (2.0 * near * far) / (far + near - z * (far - near));    
+}
+// 深度测试线性变换
+
 void main(){							
 	//FragColor = vertexColor;
 	//FragColor = texture(ourTexture, TexCoord) * vertexColor;
@@ -19,4 +30,6 @@ void main(){
 	// 第三个参数会对前两个参数 进行线性插值的混合
 	// eg. 0.2: 80%的第一个输入颜色和20%第二个输入颜色混合
 	FragColor = mix(texture(texture1, TexCoord), texture(texture2, TexCoord * vec2(-1, 1)), mixValue);
+	
+	//FragColor = vec4(vec3(gl_FragCoord.z), 1.0); // 深度值可视化
 }                                      
