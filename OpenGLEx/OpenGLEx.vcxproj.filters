@@ -75,6 +75,9 @@
     <ClInclude Include="Utils\ImGuiTool.h">
       <Filter>头文件\Utils</Filter>
     </ClInclude>
+    <ClInclude Include="Render\LightCube.hpp">
+      <Filter>头文件\Render</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Resources\awesomeface.png">

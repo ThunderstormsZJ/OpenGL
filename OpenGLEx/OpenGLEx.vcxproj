@@ -160,6 +160,7 @@
     <ClInclude Include="Render\Camera.h" />
     <ClInclude Include="Render\Cube.h" />
     <ClInclude Include="Render\Director.h" />
+    <ClInclude Include="Render\LightCube.hpp" />
     <ClInclude Include="Render\Mesh.h" />
     <ClInclude Include="Render\Model.h" />
     <ClInclude Include="Render\Node.h" />

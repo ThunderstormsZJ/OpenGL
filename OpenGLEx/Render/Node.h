@@ -27,7 +27,7 @@ public:
 		this->material = material;
 	}
 
-	void SetPosition(glm::vec3& pos) {
+	void SetPosition(glm::vec3 pos) {
 		this->position = pos;
 	}
 
@@ -44,7 +44,7 @@ public:
 		this->rotateAxis = axis;
 	}
 
-	void SetColor(glm::vec3& color) {
+	void SetColor(glm::vec3 color) {
 		this->color = color;
 	}
 

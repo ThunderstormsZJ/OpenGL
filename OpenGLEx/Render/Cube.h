@@ -4,7 +4,7 @@
 #include "../Utils/ImgCache.hpp"
 
 #pragma region Vertices
-const float vertices[] = {
+const float boxVertices[] = {
 	-0.5f, -0.5f, -0.5f,  0.0f, 0.0f, 0.0f,  0.0f, -1.0f,
 	 0.5f, -0.5f, -0.5f,  1.0f, 0.0f, 0.0f,  0.0f, -1.0f,
 	 0.5f,  0.5f, -0.5f,  1.0f, 1.0f, 0.0f,  0.0f, -1.0f,
@@ -76,7 +76,7 @@ const float planeVertices[] = {
 class Cube:public Node
 {
 public:
-	Cube(Shader& shader):Node(shader) {
+	Cube(Shader& shader, CubeType cType = CubeType::Box):Node(shader) {
 		// VAO初始化
 		glGenVertexArrays(1, &VAO);
 		glBindVertexArray(VAO);
@@ -84,7 +84,15 @@ public:
 		// VBO初始化
 		glGenBuffers(1, &VBO);
 		glBindBuffer(GL_ARRAY_BUFFER, VBO);
-		glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+		if (cType == CubeType::Box) {
+			glBufferData(GL_ARRAY_BUFFER, sizeof(boxVertices), boxVertices, GL_STATIC_DRAW);
+			vertCount = 36;
+		}
+		else if (cType == CubeType::Panel) {
+			glBufferData(GL_ARRAY_BUFFER, sizeof(planeVertices), planeVertices, GL_STATIC_DRAW);
+			vertCount = 6;
+		}
 
 		// 此处的特征值0范围为[0-15]
 		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
@@ -102,7 +110,7 @@ public:
 		glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(5 * sizeof(float)));
 		glEnableVertexAttribArray(3);
 
-		glDrawArrays(GL_TRIANGLES, 0, 36);
+		glDrawArrays(GL_TRIANGLES, 0, vertCount);
 	}
 
 	~Cube() {
@@ -119,7 +127,7 @@ public:
 
 		//  在循环中绑定是 用于多个物体绘制的情况
 		glBindVertexArray(VAO);
-		glDrawArrays(GL_TRIANGLES, 0, 36);
+		glDrawArrays(GL_TRIANGLES, 0, vertCount);
 		glBindVertexArray(0);
 
 		for (unsigned int i = 0; i < textures.size(); i++)
@@ -141,6 +149,7 @@ public:
 	}
 
 private:
+	unsigned int vertCount = 0;// 顶点个数
 	unsigned int VAO;
 	unsigned int VBO;
 	std::vector<Texture> textures;

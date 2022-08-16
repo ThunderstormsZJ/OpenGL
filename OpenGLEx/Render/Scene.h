@@ -1,6 +1,7 @@
 #pragma once
 #include "Camera.h"
 #include "Cube.h"
+#include "LightCube.hpp"
 #include "Model.h"
 
 class Scene
@@ -64,11 +65,10 @@ public:
 			for (int i = 0; i < count; i++)
 			{
 				PointLight* light = &pointLights->at(i);
-				auto lamp = std::make_shared<Cube>(shader);
+				auto lamp = std::make_shared<LightCube>(shader);
 				lamp->SetScale(0.2f);
 				lamp->SetTag("lamp");
-				lamp->SetColor(light->Color);
-				lamp->SetPosition(light->Position);
+				lamp->SetLight(light);
 				addChild(lamp);
 			}
 		});

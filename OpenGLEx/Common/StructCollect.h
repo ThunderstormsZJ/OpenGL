@@ -22,7 +22,7 @@ struct Material
 
 struct BaseLight {
 	glm::vec3 Color = glm::vec3(1.0f);
-	bool IsOpen = true;
+	bool IsOpen = false;
 	float Ambient;
 	float Diffuse;
 	float Specular;
@@ -60,4 +60,10 @@ struct SpotLight: public BaseLight
 	float Constant = 1.0f; // 常数项
 	float Linear = 0.09f;  // 一次项
 	float Quadratic = 0.032f; // 二次项
+};
+
+enum class CubeType
+{
+	Box,
+	Panel,
 };
