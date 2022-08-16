@@ -50,13 +50,13 @@ const float boxVertices[] = {
 
 const float planeVertices[] = {
 	// positions          // texture Coords (note we set these higher than 1 (together with GL_REPEAT as texture wrapping mode). this will cause the floor texture to repeat)
-	 5.0f, -0.5f,  5.0f,  2.0f, 0.0f,
-	-5.0f, -0.5f,  5.0f,  0.0f, 0.0f,
-	-5.0f, -0.5f, -5.0f,  0.0f, 2.0f,
+	 5.0f, -0.5f,  5.0f,  2.0f, 0.0f, 0.0f, -1.0f,  0.0f,
+	-5.0f, -0.5f,  5.0f,  0.0f, 0.0f, 0.0f, -1.0f,  0.0f,
+	-5.0f, -0.5f, -5.0f,  0.0f, 2.0f, 0.0f, -1.0f,  0.0f,
 
-	 5.0f, -0.5f,  5.0f,  2.0f, 0.0f,
-	-5.0f, -0.5f, -5.0f,  0.0f, 2.0f,
-	 5.0f, -0.5f, -5.0f,  2.0f, 2.0f
+	 5.0f, -0.5f,  5.0f,  2.0f, 0.0f, 0.0f, -1.0f,  0.0f,
+	-5.0f, -0.5f, -5.0f,  0.0f, 2.0f, 0.0f, -1.0f,  0.0f,
+	 5.0f, -0.5f, -5.0f,  2.0f, 2.0f, 0.0f, -1.0f,  0.0f,
 };
 //const float vertices[] = {
 ////  ---- 位置 ----       ---- 颜色 ----     - 纹理坐标 -
@@ -107,8 +107,10 @@ public:
 		glEnableVertexAttribArray(2);
 
 		// Normal
-		glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(5 * sizeof(float)));
-		glEnableVertexAttribArray(3);
+		if (cType == CubeType::Box) {		
+			glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(5 * sizeof(float)));
+			glEnableVertexAttribArray(3);
+		}
 
 		glDrawArrays(GL_TRIANGLES, 0, vertCount);
 	}
@@ -125,18 +127,19 @@ public:
 	void Render() override {
 		Node::Render();
 
-		//  在循环中绑定是 用于多个物体绘制的情况
-		glBindVertexArray(VAO);
-		glDrawArrays(GL_TRIANGLES, 0, vertCount);
-		glBindVertexArray(0);
-
+		glBindTexture(GL_TEXTURE_2D, 0);
 		for (unsigned int i = 0; i < textures.size(); i++)
 		{
 			shader.setInt(textures[i].Name, i);
 			glActiveTexture(GL_TEXTURE0 + i); // 激活纹理单元
 			glBindTexture(GL_TEXTURE_2D, textures[i].Id);
-			glActiveTexture(GL_TEXTURE0);
+			//glActiveTexture(GL_TEXTURE0);
 		}
+
+		//  在循环中绑定是 用于多个物体绘制的情况
+		glBindVertexArray(VAO);
+		glDrawArrays(GL_TRIANGLES, 0, vertCount);
+		glBindVertexArray(0);
 	}
 
 	void SetTexture(std::string imgPath, std::string name) {
@@ -144,6 +147,7 @@ public:
 		Texture texture;
 		texture.Id = ImgCache::GetInstance().addTexture(imgPath);	// 加载图片
 		texture.Name = name;
+		texture.Path = imgPath;
 
 		textures.push_back(texture);
 	}

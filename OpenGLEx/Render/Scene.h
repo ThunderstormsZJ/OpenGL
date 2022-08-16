@@ -14,7 +14,28 @@ public:
 
 		//createTextureCueBox();
 		//createLightCueBox();
-		createNanosuitModel();
+		createCubePanel();
+		//createNanosuitModel();
+	}
+
+	void createCubePanel() {
+		Shader shader("Shader/Texture_VertextShader.glsl", "Shader/Texture_FragmentShader.glsl");
+		auto box = std::make_shared<Cube>(shader);
+		box->SetPosition(glm::vec3(-1.0f, 0.0f, -1.0f));
+		box->SetTexture("Resources/marble.jpg", "texture1");
+		addChild(box);
+		
+		Shader shader1("Shader/Texture_VertextShader.glsl", "Shader/Texture_FragmentShader.glsl");
+		box = std::make_shared<Cube>(shader1);
+		box->SetPosition(glm::vec3(2.0f, 0.0f, 0.0f));
+		box->SetTexture("Resources/marble.jpg", "texture1");
+		addChild(box);
+
+		Shader panelShader("Shader/Texture_VertextShader.glsl", "Shader/Texture_FragmentShader.glsl");
+		auto panel = std::make_shared<Cube>(panelShader, CubeType::Panel);
+		panel->SetPosition(glm::vec3(0));
+		panel->SetTexture("Resources/metal.png", "texture1");
+		addChild(panel);
 	}
 
 	void createNanosuitModel() {

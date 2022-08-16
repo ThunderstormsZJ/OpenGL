@@ -8,7 +8,7 @@ public:
 	Camera() {
 		m_cameraPitch = 0;
 		m_cameraYaw = -90;
-		m_cameraPos = glm::vec3(0, 0, 30);
+		m_cameraPos = glm::vec3(0, 0, 10);
 		m_worldUp = glm::vec3(0, 1, 0);
 		m_cameraFov = 45.0f;
 
