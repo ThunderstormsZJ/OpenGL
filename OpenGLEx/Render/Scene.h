@@ -32,8 +32,8 @@ public:
 			box->SetMaterial(&m_tool.material);
 			box->SetPosition(cubePositions[i]);
 			box->SetRotate(i * 10, glm::vec3(1, 1, 1));
-			box->SetTexture("Resources/container2.png", "material.diffuse");
-			box->SetTexture("Resources/container2_specular.png", "material.specular");
+			box->SetTexture("Resources/container2.png", "material.texture_diffuse1");
+			box->SetTexture("Resources/container2_specular.png", "material.texture_specular1");
 			addChild(box);
 		}
 	}

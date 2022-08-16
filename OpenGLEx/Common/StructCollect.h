@@ -22,7 +22,7 @@ struct Material
 
 struct BaseLight {
 	glm::vec3 Color = glm::vec3(1.0f);
-	bool IsOpen = false;
+	bool IsOpen = true;
 	float Ambient;
 	float Diffuse;
 	float Specular;

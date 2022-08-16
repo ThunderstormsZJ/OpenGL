@@ -1,14 +1,19 @@
-#version 330 core						
+#version 330 core
+#extension GL_ARB_shading_language_include : require
+#include "common_light_FragmentShader.glsl"
+
 out vec4 FragColor;
 
-struct Material {
-	sampler2D texture_diffuse1;
-};
-
-uniform Material material;
-
-in vec2 TexCoord;
+in vec3 Normal;
 
 void main(){
-	FragColor = texture(material.texture_diffuse1, TexCoord);
+	vec3 norm = normalize(Normal);
+	vec3 viewDir = normalize(-FragPos); // viewPos - FragPos => (0,0,0) - FragPos => -FragPos
+	vec3 result;
+
+	result += CalcDirLight(norm, viewDir);
+	result += CalcPointLights(norm, viewDir);
+	result += CalcSpotLight(norm, viewDir);
+
+	FragColor = vec4(result, 1);
 }
