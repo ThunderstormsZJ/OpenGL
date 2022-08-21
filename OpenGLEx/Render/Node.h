@@ -10,7 +10,8 @@ public:
 		:shader(shader),
 		material(nullptr)
 	{
-		shader.use();
+		renderShader = &this->shader;
+		renderShader->use();
 		name = typeid(this).name();
 	}
 
@@ -54,7 +55,7 @@ public:
 	std::string GetTag() { return tag; }
 
 	virtual void Render() {
-		shader.use();
+		renderShader->use();
 		updateMatrixRender();
 		updateLightRender();
 	};
@@ -63,6 +64,7 @@ public:
 
 protected:
 	Shader shader;
+	Shader* renderShader;
 
 private:
 	/* Self Property */
@@ -91,29 +93,29 @@ private:
 		glm::mat4 projection = glm::perspective(glm::radians(camera->getFov()), (float)WINDOW_WIDTH / (float)WINDOW_HEIGHT, 0.1f, 100.0f);
 		glm::mat4 view = camera->getViewMartix();
 
-		shader.setMat("model", glm::value_ptr(modelMatrix)); // 模型矩阵
-		shader.setMat("projection", glm::value_ptr(projection)); // 透视矩阵
-		shader.setMat("view", glm::value_ptr(view)); // 观察矩阵
+		renderShader->setMat("model", glm::value_ptr(modelMatrix)); // 模型矩阵
+		renderShader->setMat("projection", glm::value_ptr(projection)); // 透视矩阵
+		renderShader->setMat("view", glm::value_ptr(view)); // 观察矩阵
 
-		shader.setVec3("objectColor", glm::value_ptr(color)); // 颜色
+		renderShader->setVec3("objectColor", glm::value_ptr(color)); // 颜色
 	}
 
 	void updateLightRender() {
 
 		// 设置材质Shininess
 		if (material != nullptr) 
-			shader.setInt("material.shininess", material->Shininess);
+			renderShader->setInt("material.shininess", material->Shininess);
 		else 
-			shader.setInt("material.shininess", 2);
+			renderShader->setInt("material.shininess", 2);
 
 		// 平行光
 		DirLight* dirLight = Director::GetInstance().GetPDirLight();
-		shader.setBool("dirLight.isOpen", dirLight->IsOpen);
+		renderShader->setBool("dirLight.isOpen", dirLight->IsOpen);
 		if (dirLight->IsOpen) {
-			shader.setVec3("dirLight.direction", glm::value_ptr(dirLight->Direction));
-			shader.setVec3("dirLight.ambient", glm::value_ptr(glm::vec3(dirLight->Ambient * dirLight->Color))); // 将光照调暗了一些以搭配场景
-			shader.setVec3("dirLight.diffuse", glm::value_ptr(glm::vec3(dirLight->Diffuse * dirLight->Color)));
-			shader.setVec3("dirLight.specular", glm::value_ptr(glm::vec3(dirLight->Specular * dirLight->Color)));
+			renderShader->setVec3("dirLight.direction", glm::value_ptr(dirLight->Direction));
+			renderShader->setVec3("dirLight.ambient", glm::value_ptr(glm::vec3(dirLight->Ambient * dirLight->Color))); // 将光照调暗了一些以搭配场景
+			renderShader->setVec3("dirLight.diffuse", glm::value_ptr(glm::vec3(dirLight->Diffuse * dirLight->Color)));
+			renderShader->setVec3("dirLight.specular", glm::value_ptr(glm::vec3(dirLight->Specular * dirLight->Color)));
 		}
 
 		// 点光源
@@ -122,34 +124,34 @@ private:
 		{
 			PointLight* pointLight = &pointLights->at(i);
 			std::string name = format("pointLights[%d].", i);
-			shader.setBool(name + "isOpen", pointLight->IsOpen);
+			renderShader->setBool(name + "isOpen", pointLight->IsOpen);
 			if (pointLight->IsOpen) {
-				shader.setVec3(name + "position", glm::value_ptr(pointLight->Position));
-				shader.setVec3(name + "ambient", glm::value_ptr(glm::vec3(pointLight->Ambient * pointLight->Color)));
-				shader.setVec3(name + "diffuse", glm::value_ptr(glm::vec3(pointLight->Diffuse * pointLight->Color)));
-				shader.setVec3(name + "specular", glm::value_ptr(glm::vec3(pointLight->Specular * pointLight->Color)));
+				renderShader->setVec3(name + "position", glm::value_ptr(pointLight->Position));
+				renderShader->setVec3(name + "ambient", glm::value_ptr(glm::vec3(pointLight->Ambient * pointLight->Color)));
+				renderShader->setVec3(name + "diffuse", glm::value_ptr(glm::vec3(pointLight->Diffuse * pointLight->Color)));
+				renderShader->setVec3(name + "specular", glm::value_ptr(glm::vec3(pointLight->Specular * pointLight->Color)));
 
-				shader.setFloat(name + "constant", pointLight->Constant);
-				shader.setFloat(name + "linear", pointLight->Linear);
-				shader.setFloat(name + "quadratic", pointLight->Quadratic);
+				renderShader->setFloat(name + "constant", pointLight->Constant);
+				renderShader->setFloat(name + "linear", pointLight->Linear);
+				renderShader->setFloat(name + "quadratic", pointLight->Quadratic);
 			}
 		}
 
 		// 聚光灯
 		SpotLight* spotLight = Director::GetInstance().GetPSpotLight();
-		shader.setBool("spotLight.isOpen", spotLight->IsOpen);
+		renderShader->setBool("spotLight.isOpen", spotLight->IsOpen);
 		if (spotLight->IsOpen) {
-			shader.setVec3("spotLight.position", glm::value_ptr(spotLight->Position));
-			shader.setVec3("spotLight.direction", glm::value_ptr(spotLight->Direction));
-			shader.setFloat("spotLight.cutOff", glm::cos(spotLight->CutOffRad));
-			shader.setFloat("spotLight.outerCutOff", glm::cos(spotLight->CutOffRad + glm::radians(spotLight->SmoothEdgeIntensity)));
-			shader.setVec3("spotLight.ambient", glm::value_ptr(glm::vec3(spotLight->Ambient) * spotLight->Color));
-			shader.setVec3("spotLight.diffuse", glm::value_ptr(glm::vec3(spotLight->Diffuse) * spotLight->Color));
-			shader.setVec3("spotLight.specular", glm::value_ptr(glm::vec3(spotLight->Specular) * spotLight->Color));
+			renderShader->setVec3("spotLight.position", glm::value_ptr(spotLight->Position));
+			renderShader->setVec3("spotLight.direction", glm::value_ptr(spotLight->Direction));
+			renderShader->setFloat("spotLight.cutOff", glm::cos(spotLight->CutOffRad));
+			renderShader->setFloat("spotLight.outerCutOff", glm::cos(spotLight->CutOffRad + glm::radians(spotLight->SmoothEdgeIntensity)));
+			renderShader->setVec3("spotLight.ambient", glm::value_ptr(glm::vec3(spotLight->Ambient) * spotLight->Color));
+			renderShader->setVec3("spotLight.diffuse", glm::value_ptr(glm::vec3(spotLight->Diffuse) * spotLight->Color));
+			renderShader->setVec3("spotLight.specular", glm::value_ptr(glm::vec3(spotLight->Specular) * spotLight->Color));
 
-			shader.setFloat("spotLight.constant", spotLight->Constant);
-			shader.setFloat("spotLight.linear", spotLight->Linear);
-			shader.setFloat("spotLight.quadratic", spotLight->Quadratic);
+			renderShader->setFloat("spotLight.constant", spotLight->Constant);
+			renderShader->setFloat("spotLight.linear", spotLight->Linear);
+			renderShader->setFloat("spotLight.quadratic", spotLight->Quadratic);
 		}
 	}
 };

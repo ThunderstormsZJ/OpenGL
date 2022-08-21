@@ -150,6 +150,7 @@
     <None Include="Shader\light_VertextShader.glsl" />
     <None Include="Shader\model_FragmentShader.glsl" />
     <None Include="Shader\model_VertextShader.glsl" />
+    <None Include="Shader\TextureOutLine_FragmentShader.glsl" />
     <None Include="Shader\Texture_FragmentShader.glsl" />
     <None Include="Shader\Texture_VertextShader.glsl" />
   </ItemGroup>

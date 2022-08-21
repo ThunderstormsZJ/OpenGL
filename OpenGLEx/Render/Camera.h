@@ -1,4 +1,5 @@
 #pragma once
+#include "../Utils/Logger.hpp"
 #define WINDOW_WIDTH 1280
 #define WINDOW_HEIGHT 720
 
@@ -50,6 +51,25 @@ public:
 			openMouseOperate(window, false);
 		}
 
+		// ×óÐý
+		if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS) {
+			mouseEulerMove(m_lastMouseX - m_keyDireMoveSpeed * deltaTime, m_lastMouseY);
+		}
+
+		// ÓÒÐý
+		if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS) {
+			mouseEulerMove(m_lastMouseX + m_keyDireMoveSpeed * deltaTime, m_lastMouseY);
+		}
+
+		// ÉÏÐý
+		if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) {
+			mouseEulerMove(m_lastMouseX, m_lastMouseY - m_keyDireMoveSpeed * deltaTime);
+		}
+
+		// ÏÂÐý
+		if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS) {
+			mouseEulerMove(m_lastMouseX, m_lastMouseY + m_keyDireMoveSpeed * deltaTime);
+		}
 	}
 
 	void processMouseInput(GLFWwindow* window) {
@@ -151,6 +171,7 @@ public:
 private:
 	bool m_firstMouse = true;
 	float m_mouseMoveSpeed = 0.02f;
+	float m_keyDireMoveSpeed = 1000.0f;
 	float m_lastMouseX = WINDOW_WIDTH / 2;
 	float m_lastMouseY = WINDOW_HEIGHT / 2;
 

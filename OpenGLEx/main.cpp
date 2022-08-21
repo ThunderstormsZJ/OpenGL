@@ -40,8 +40,15 @@ int main() {
 
 	glViewport(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
 
-	glEnable(GL_DEPTH_TEST);
-	//glDepthFunc(GL_ALWAYS);
+	// 深度测试
+	glEnable(GL_DEPTH_TEST); // 开启
+	glDepthFunc(GL_LESS);
+	//glDepthFunc(GL_ALWAYS);  // 深度测试方法
+
+	// 模板测试
+	glEnable(GL_STENCIL_TEST);// 开启
+	glStencilOp(GL_KEEP, GL_REPLACE, GL_REPLACE); // 都通过时设置为ref值
+
 	//glEnable(GL_CULL_FACE); // 开启面剔除功能
 	//glCullFace(GL_FRONT);  // GL_BACK：只剔除背面 GL_FRONT：只剔除正面 GL_FRONT_AND_BACK：剔除背面和正面
 	//glFrontFace(GL_CCW); // GL_CCW: 逆时针 GL_CW: 顺时针 （默认逆时针）
@@ -70,7 +77,7 @@ int main() {
 		guiTool.render();
 
 		glClearColor(guiTool.ClearColor.x, guiTool.ClearColor.y, guiTool.ClearColor.z, guiTool.ClearColor.w);
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
 		// scene
 		scene.update(deltaTime);

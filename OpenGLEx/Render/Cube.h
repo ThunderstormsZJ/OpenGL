@@ -76,7 +76,10 @@ const float planeVertices[] = {
 class Cube:public Node
 {
 public:
-	Cube(Shader& shader, CubeType cType = CubeType::Box):Node(shader) {
+	Cube(Shader& shader, CubeType cType = CubeType::Box, bool openOutLine = false):Node(shader) {
+		m_cType = cType;
+		m_openOutLine = openOutLine;
+
 		// VAO初始化
 		glGenVertexArrays(1, &VAO);
 		glBindVertexArray(VAO);
@@ -112,7 +115,11 @@ public:
 			glEnableVertexAttribArray(3);
 		}
 
-		glDrawArrays(GL_TRIANGLES, 0, vertCount);
+		//glDrawArrays(GL_TRIANGLES, 0, vertCount);
+
+		if (m_openOutLine) {
+			m_outLineShader = new Shader("Shader/Texture_VertextShader.glsl", "Shader/TextureOutLine_FragmentShader.glsl");
+		}
 	}
 
 	~Cube() {
@@ -125,6 +132,15 @@ public:
 		glDeleteBuffers(1, &VBO);
 	}
 	void Render() override {
+		// 画线框
+		if (m_openOutLine) {
+			glStencilFunc(GL_ALWAYS, 1, 0xFF); // 所有的片段都应该更新模板缓冲
+			glStencilMask(0xFF); // 启用模板缓冲写入
+		}
+		else {
+			glStencilMask(0x00); // 禁用模板缓冲写入
+		}
+
 		Node::Render();
 
 		glBindTexture(GL_TEXTURE_2D, 0);
@@ -140,6 +156,29 @@ public:
 		glBindVertexArray(VAO);
 		glDrawArrays(GL_TRIANGLES, 0, vertCount);
 		glBindVertexArray(0);
+
+		// 线框
+		if (m_openOutLine) {
+			glStencilFunc(GL_NOTEQUAL, 1, 0xFF); // 绘制不等于1的部分
+			glStencilMask(0x00); // 禁止写入
+			glDisable(GL_DEPTH_TEST); // 禁止深度测试
+			// 绘制线框
+			this->SetScale(1.05);
+			this->renderShader = this->m_outLineShader;
+			
+			Node::Render();
+			glBindVertexArray(VAO);
+			glDrawArrays(GL_TRIANGLES, 0, vertCount);
+			glBindVertexArray(0);
+
+			// 还原
+			this->renderShader = &this->shader;
+			this->SetScale(1);
+			glStencilMask(0xFF);
+			glStencilFunc(GL_ALWAYS, 0, 0xFF);
+			glEnable(GL_DEPTH_TEST);
+		}
+
 	}
 
 	void SetTexture(std::string imgPath, std::string name) {
@@ -157,4 +196,7 @@ private:
 	unsigned int VAO;
 	unsigned int VBO;
 	std::vector<Texture> textures;
+	CubeType m_cType; // 物体类型
+	bool m_openOutLine; // 是否开启边框
+	Shader* m_outLineShader; // 边框shader
 };
