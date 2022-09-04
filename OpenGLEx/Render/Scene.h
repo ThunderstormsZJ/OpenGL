@@ -4,6 +4,9 @@
 #include "LightCube.hpp"
 #include "Model.h"
 
+#define MODE_TAG_LIGHT "LIGHT"
+#define MODE_TAG_TRANSPARENT "TRANSPARENT"
+
 class Scene
 {
 public:
@@ -54,6 +57,7 @@ public:
 			auto vegetationCube = std::make_shared<Cube>(shader, CubeType::Transparent);
 			vegetationCube->SetPosition(vegetation[i]);
 			vegetationCube->SetTexture("Resources/blending_transparent_window.png", "texture1", GL_CLAMP_TO_EDGE);
+			vegetationCube->SetTag(MODE_TAG_TRANSPARENT);
 			addChild(vegetationCube);
 		}
 	}
@@ -153,13 +157,17 @@ public:
 
 	void render(float deltaTime) {
 		// 进行一次排序
-		// 从远到近绘制
+		// 透明物体从远到近绘制
 		std::sort(m_childrenModel.begin(), m_childrenModel.end(), 
 			[](std::shared_ptr<Node> nodeA, std::shared_ptr<Node> nodeB) {
-				glm::vec3 vecA = Director::GetInstance().MainCamera->getPos() - nodeA->GetPos();
-				glm::vec3 vecB = Director::GetInstance().MainCamera->getPos() - nodeB->GetPos();
+				if (nodeA->GetTag() == MODE_TAG_TRANSPARENT && nodeB->GetTag() == MODE_TAG_TRANSPARENT) {
+					glm::vec3 vecA = Director::GetInstance().MainCamera->getPos() - nodeA->GetPos();
+					glm::vec3 vecB = Director::GetInstance().MainCamera->getPos() - nodeB->GetPos();
 
-				return glm::length(vecA) > glm::length(vecB);
+					return glm::length(vecA) > glm::length(vecB);
+				}
+
+				return false;
 			}
 		);
 
