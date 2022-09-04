@@ -137,9 +137,11 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="Resources\awesomeface.png" />
+    <Image Include="Resources\blending_transparent_window.png" />
     <Image Include="Resources\container.jpg" />
     <Image Include="Resources\container2.png" />
     <Image Include="Resources\container2_specular.png" />
+    <Image Include="Resources\grass.png" />
     <Image Include="Resources\matrix.jpg" />
   </ItemGroup>
   <ItemGroup>

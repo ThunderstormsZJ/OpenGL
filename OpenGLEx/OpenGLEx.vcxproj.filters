@@ -95,6 +95,12 @@
     <Image Include="Resources\matrix.jpg">
       <Filter>资源文件\Resources</Filter>
     </Image>
+    <Image Include="Resources\grass.png">
+      <Filter>资源文件\Resources</Filter>
+    </Image>
+    <Image Include="Resources\blending_transparent_window.png">
+      <Filter>资源文件\Resources</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -14,8 +14,8 @@ public:
 
 		//createTextureCueBox();
 		//createLightCueBox();
-		createCubePanel();
-		//createNanosuitModel();
+		createCubePanel(); 
+		//createNanosuitModel(); // 模型
 	}
 
 	void createCubePanel() {
@@ -27,15 +27,35 @@ public:
 		panel->SetTexture("Resources/metal.png", "texture1");
 		addChild(panel);
 
-		auto box = std::make_shared<Cube>(shader, CubeType::Box, true);
-		box->SetPosition(glm::vec3(-1.0f, -0.5f, -1.0f));
+		auto box = std::make_shared<Cube>(shader, CubeType::Box);
+		box->SetPosition(glm::vec3(-1.0f, 0.0f, -1.0f));
 		box->SetTexture("Resources/marble.jpg", "texture1");
 		addChild(box);
 		
-		box = std::make_shared<Cube>(shader, CubeType::Box, true);
+		box = std::make_shared<Cube>(shader, CubeType::Box);
 		box->SetPosition(glm::vec3(2.0f, 0.0f, 0.0f));
 		box->SetTexture("Resources/marble.jpg", "texture1");
 		addChild(box);
+
+		// 草
+		// transparent vegetation locations
+		// --------------------------------
+		std::vector<glm::vec3> vegetation
+		{
+			glm::vec3(-1.5f, 0.0f, -0.48f),
+			glm::vec3(1.5f, 0.0f, 0.51f),
+			glm::vec3(0.0f, 0.0f, 0.7f),
+			glm::vec3(-0.3f, 0.0f, -2.3f),
+			glm::vec3(0.5f, 0.0f, -0.6f)
+		};
+
+		for (unsigned int i = 0; i < vegetation.size(); i++)
+		{
+			auto vegetationCube = std::make_shared<Cube>(shader, CubeType::Transparent);
+			vegetationCube->SetPosition(vegetation[i]);
+			vegetationCube->SetTexture("Resources/blending_transparent_window.png", "texture1", GL_CLAMP_TO_EDGE);
+			addChild(vegetationCube);
+		}
 	}
 
 	void createNanosuitModel() {
@@ -132,6 +152,17 @@ public:
 	}
 
 	void render(float deltaTime) {
+		// 进行一次排序
+		// 从远到近绘制
+		std::sort(m_childrenModel.begin(), m_childrenModel.end(), 
+			[](std::shared_ptr<Node> nodeA, std::shared_ptr<Node> nodeB) {
+				glm::vec3 vecA = Director::GetInstance().MainCamera->getPos() - nodeA->GetPos();
+				glm::vec3 vecB = Director::GetInstance().MainCamera->getPos() - nodeB->GetPos();
+
+				return glm::length(vecA) > glm::length(vecB);
+			}
+		);
+
 		for (auto begin = m_childrenModel.begin(); begin != m_childrenModel.end(); begin++)
 		{
 			(*begin)->Render();

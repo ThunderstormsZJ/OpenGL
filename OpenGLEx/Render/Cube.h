@@ -5,6 +5,9 @@
 
 #pragma region Vertices
 const float boxVertices[] = {
+	// positions
+						  // texture Coords
+									  // Normal
 	-0.5f, -0.5f, -0.5f,  0.0f, 0.0f, 0.0f,  0.0f, -1.0f,
 	 0.5f, -0.5f, -0.5f,  1.0f, 0.0f, 0.0f,  0.0f, -1.0f,
 	 0.5f,  0.5f, -0.5f,  1.0f, 1.0f, 0.0f,  0.0f, -1.0f,
@@ -58,6 +61,17 @@ const float planeVertices[] = {
 	-5.0f, -0.5f, -5.0f,  0.0f, 2.0f, 0.0f, -1.0f,  0.0f,
 	 5.0f, -0.5f, -5.0f,  2.0f, 2.0f, 0.0f, -1.0f,  0.0f,
 };
+
+float transparentVertices[] = {
+	// positions         // texture Coords
+	0.0f,  0.5f, 0.0f,  0.0f, 1.0f,  0.0f, 0.0f, 1.0f, // 左上
+	0.0f, -0.5f, 0.0f,  0.0f, 0.0f,  0.0f, 0.0f, 1.0f, // 左下
+	1.0f, -0.5f, 0.0f,  1.0f, 0.0f,  0.0f, 0.0f, 1.0f, // 右下
+		  
+	0.0f,  0.5f, 0.0f,  0.0f, 1.0f,  0.0f, 0.0f, 1.0f, // 左上
+	1.0f, -0.5f, 0.0f,  1.0f, 0.0f,  0.0f, 0.0f, 1.0f, // 右下
+	1.0f,  0.5f, 0.0f,  1.0f, 1.0f,  0.0f, 0.0f, 1.0f, // 右上
+};
 //const float vertices[] = {
 ////  ---- 位置 ----       ---- 颜色 ----     - 纹理坐标 -
 //	0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f,   // 右上
@@ -94,6 +108,10 @@ public:
 		}
 		else if (cType == CubeType::Panel) {
 			glBufferData(GL_ARRAY_BUFFER, sizeof(planeVertices), planeVertices, GL_STATIC_DRAW);
+			vertCount = 6;
+		}
+		else if (cType == CubeType::Transparent){
+			glBufferData(GL_ARRAY_BUFFER, sizeof(transparentVertices), transparentVertices, GL_STATIC_DRAW);
 			vertCount = 6;
 		}
 
@@ -161,7 +179,7 @@ public:
 		if (m_openOutLine) {
 			glStencilFunc(GL_NOTEQUAL, 1, 0xFF); // 绘制不等于1的部分
 			glStencilMask(0x00); // 禁止写入
-			glDisable(GL_DEPTH_TEST); // 禁止深度测试
+			//glDisable(GL_DEPTH_TEST); // 禁止深度测试
 			// 绘制线框
 			this->SetScale(1.05);
 			this->renderShader = this->m_outLineShader;
@@ -175,16 +193,16 @@ public:
 			this->renderShader = &this->shader;
 			this->SetScale(1);
 			glStencilMask(0xFF);
-			glStencilFunc(GL_ALWAYS, 0, 0xFF);
+			glStencilFunc(GL_ALWAYS, 1, 0xFF);
 			glEnable(GL_DEPTH_TEST);
 		}
 
 	}
 
-	void SetTexture(std::string imgPath, std::string name) {
+	void SetTexture(std::string imgPath, std::string name, GLint param = GL_REPEAT) {
 		stbi_set_flip_vertically_on_load(true);
 		Texture texture;
-		texture.Id = ImgCache::GetInstance().addTexture(imgPath);	// 加载图片
+		texture.Id = ImgCache::GetInstance().addTexture(imgPath, param);	// 加载图片
 		texture.Name = name;
 		texture.Path = imgPath;
 

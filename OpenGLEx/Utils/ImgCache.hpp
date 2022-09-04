@@ -7,7 +7,7 @@
 class ImgCache : public Singleton<ImgCache>
 {
 public:
-	unsigned int addTexture(std::string imgPath) {
+	unsigned int addTexture(std::string imgPath, GLint param = GL_REPEAT) {
 		auto it = cache.find(imgPath);
 		unsigned int texture = NULL;
 		if (it != cache.end()) {
@@ -15,7 +15,7 @@ public:
 		}
 		else
 		{
-			texture = loadTexture(imgPath);
+			texture = loadTexture(imgPath, param);
 
 			cache[imgPath] = texture;
 		}
@@ -23,7 +23,7 @@ public:
 		return texture;
 	}
 
-	unsigned int loadTexture(std::string imgPath) {
+	unsigned int loadTexture(std::string imgPath, GLint param = GL_REPEAT) {
 		// Texture ≥ı ºªØ
 		unsigned int texture;
 		glGenTextures(1, &texture);
@@ -52,11 +52,11 @@ public:
 
 
 			glBindTexture(GL_TEXTURE_2D, texture);
-			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, format, GL_UNSIGNED_BYTE, data);
+			glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
 			glGenerateMipmap(GL_TEXTURE_2D);
 
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, param);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, param);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 		}

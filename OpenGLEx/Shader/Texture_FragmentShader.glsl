@@ -27,9 +27,14 @@ void main(){
 	//FragColor = vertexColor;
 	//FragColor = texture(ourTexture, TexCoord) * vertexColor;
 
+	vec4 tex1Color = texture(texture1, TexCoord);
+	// 丢弃透明部分
+	if (tex1Color.a < 0.1)
+        discard;
+
 	// 第三个参数会对前两个参数 进行线性插值的混合
 	// eg. 0.2: 80%的第一个输入颜色和20%第二个输入颜色混合
-	FragColor = mix(texture(texture1, TexCoord), texture(texture2, TexCoord * vec2(-1, 1)), mixValue);
-	
+	//FragColor = mix(tex1Color, texture(texture2, TexCoord * vec2(-1, 1)), mixValue);
+	FragColor = tex1Color;
 	//FragColor = vec4(vec3(gl_FragCoord.z), 1.0); // 深度值可视化
 }                                      

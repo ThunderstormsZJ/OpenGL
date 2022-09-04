@@ -66,4 +66,5 @@ enum class CubeType
 {
 	Box,
 	Panel,
+	Transparent,
 };
