@@ -1,5 +1,5 @@
 #version 330 core
-#extension GL_ARB_shading_language_include : require
+//#extension GL_ARB_shading_language_include : require
 #include "common_light_FragmentShader.glsl"
 
 out vec4 FragColor;

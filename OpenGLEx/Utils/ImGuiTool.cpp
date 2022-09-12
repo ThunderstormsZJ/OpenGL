@@ -1,6 +1,6 @@
 #include "ImGuiTool.h"
 
-ImGuiTool::ImGuiTool(GLFWwindow* context):m_context(context)
+ImGuiTool::ImGuiTool(GLFWwindow* context) :m_context(context)
 {
 	init();
 }
@@ -15,6 +15,11 @@ void ImGuiTool::init()
 	// Bind OpenGL And Init
 	ImGui_ImplGlfw_InitForOpenGL(m_context, true);
 	ImGui_ImplOpenGL3_Init();
+
+	ImGuiIO io = ImGui::GetIO();
+
+	// 字体
+	io.Fonts->AddFontFromFileTTF("Resources/fonts/WenDaoLingFeiXiaoKai-2.ttf", 16.0f, NULL, io.Fonts->GetGlyphRangesChineseFull());
 }
 
 void ImGuiTool::render()
@@ -27,6 +32,10 @@ void ImGuiTool::render()
 	{
 		//Content
 		ImGui::Begin("OpenGL Tools");
+
+		if (ImGui::Checkbox(u8"线框模式", &ShowPolygonLineMode)) {
+
+		}
 
 		if (ImGui::CollapsingHeader("Windows Config")) {
 			ImGui::ColorEdit4("Clear Color", glm::value_ptr(ClearColor));

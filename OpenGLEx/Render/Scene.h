@@ -14,6 +14,7 @@ public:
 		:m_tool(tool)
 	{
 		initEvent();
+		this->CreateFrameBuffer();
 
 		//createTextureCueBox();
 		//createLightCueBox();
@@ -52,14 +53,22 @@ public:
 			glm::vec3(0.5f, 0.0f, -0.6f)
 		};
 
-		for (unsigned int i = 0; i < vegetation.size(); i++)
-		{
-			auto vegetationCube = std::make_shared<Cube>(shader, CubeType::Transparent);
-			vegetationCube->SetPosition(vegetation[i]);
-			vegetationCube->SetTexture("Resources/blending_transparent_window.png", "texture1", GL_CLAMP_TO_EDGE);
-			vegetationCube->SetTag(MODE_TAG_TRANSPARENT);
-			addChild(vegetationCube);
-		}
+		//for (unsigned int i = 0; i < vegetation.size(); i++)
+		//{
+		//	auto vegetationCube = std::make_shared<Cube>(shader, CubeType::Transparent);
+		//	vegetationCube->SetPosition(vegetation[i]);
+		//	vegetationCube->SetTexture("Resources/blending_transparent_window.png", "texture1", GL_CLAMP_TO_EDGE);
+		//	vegetationCube->SetTag(MODE_TAG_TRANSPARENT);
+		//	addChild(vegetationCube);
+		//}
+
+		//for (unsigned int i = 0; i < vegetation.size(); i++)
+		//{
+		//	auto vegetationCube = std::make_shared<Cube>(shader, CubeType::Transparent);
+		//	vegetationCube->SetPosition(vegetation[i]);
+		//	vegetationCube->SetTexture("Resources/grass.png", "texture1", GL_CLAMP_TO_EDGE);
+		//	addChild(vegetationCube);
+		//}
 	}
 
 	void createNanosuitModel() {
@@ -171,10 +180,18 @@ public:
 			}
 		);
 
+		if (fbo != 0)
+			glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+		glEnable(GL_DEPTH_TEST); // enable depth testing (is disabled for rendering screen-space quad)
+		glClearColor(m_tool.ClearColor.x, m_tool.ClearColor.y, m_tool.ClearColor.z, m_tool.ClearColor.w);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+
 		for (auto begin = m_childrenModel.begin(); begin != m_childrenModel.end(); begin++)
 		{
 			(*begin)->Render();
 		}
+
+		this->DisplayFramebufferTexture(mfbo_texture);
 	}
 	void update(float delataTime) {
 		for (auto begin = m_childrenModel.begin(); begin != m_childrenModel.end(); begin++)
@@ -185,9 +202,19 @@ public:
 	void destory() {
 		// clear 后使用智能指针会自动调用析构函数销毁
 		m_childrenModel.clear();
+
+		glDeleteFramebuffers(1, &fbo);
 	}
 
 private:
+	// 自定义帧缓冲
+	bool FreamBuffEnable = true;
+	unsigned int mfbo_VAO = 0;
+	unsigned int mfbo_VBO;
+	unsigned int mfbo_texture;
+	Shader* mfbo_Shader;
+	unsigned int fbo = 0;
+
 	std::vector<std::shared_ptr<Node>> m_childrenModel;
 	ImGuiTool& m_tool;
 
@@ -220,4 +247,93 @@ private:
 	//	m_mixValue = m_mixValue < 0 ? 0 : m_mixValue;
 	//	m_shader->setFloat("mixValue", m_mixValue);
 	//}
+
+	// 创建一个帧缓冲，并写入到纹理附件当中
+	void CreateFrameBuffer() {
+		if (!this->FreamBuffEnable)
+			return;
+
+		mfbo_Shader = new Shader("Shader/FBO_Debugger_VertextShader.glsl", "Shader/FBO_Debugger_FragmentShader.glsl");
+
+		glGenFramebuffers(1, &fbo);
+		glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+
+#pragma region 纹理附件
+
+		glGenTextures(1, &mfbo_texture);
+		glBindTexture(GL_TEXTURE_2D, mfbo_texture);
+
+		// 宽高为屏幕大小（这不是必须的）
+		// pixels参数为Null， 我们仅仅分配了内存而没有填充它。
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, WINDOW_WIDTH, WINDOW_HEIGHT, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		glBindTexture(GL_TEXTURE_2D, 0);
+
+		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, mfbo_texture, 0);
+
+#pragma endregion
+
+#pragma region 深度和模板附件渲染缓冲对象
+
+		unsigned int rbo;
+		glGenRenderbuffers(1, &rbo);
+		glBindRenderbuffer(GL_RENDERBUFFER, rbo);
+		glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, WINDOW_WIDTH, WINDOW_HEIGHT);
+		glBindRenderbuffer(GL_RENDERBUFFER, 0);
+
+		glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, rbo);
+
+#pragma endregion
+
+		// 检查
+		if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+			Logger.Instance->error("ERROR::FRAMEBUFFER:: Framebuffer is not complete!");
+
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	}
+
+	// 绘制帧缓冲的纹理附件
+	void DisplayFramebufferTexture(GLuint textureID)
+	{
+		if (!this->FreamBuffEnable)
+			return;
+
+		glBindFramebuffer(GL_FRAMEBUFFER, 0); // 返回默认渲染
+		glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+		glClear(GL_COLOR_BUFFER_BIT);
+		// 绘制一个四边形不需要深度测试
+		glDisable(GL_DEPTH_TEST);
+
+		if (mfbo_VAO == 0)
+		{
+			// 初始化
+			float quadVertices[] = {
+				// positions        // texture Coords
+				-1.0f,  1.0f, 0.0f, 0.0f, 1.0f,
+				-1.0f, -1.0f, 0.0f, 0.0f, 0.0f,
+				 1.0f,  1.0f, 0.0f, 1.0f, 1.0f,
+				 1.0f, -1.0f, 0.0f, 1.0f, 0.0f,
+			};
+			// setup plane VAO
+			glGenVertexArrays(1, &mfbo_VAO);
+			glGenBuffers(1, &mfbo_VBO);
+			glBindVertexArray(mfbo_VAO);
+			glBindBuffer(GL_ARRAY_BUFFER, mfbo_VBO);
+			glBufferData(GL_ARRAY_BUFFER, sizeof(quadVertices), &quadVertices, GL_STATIC_DRAW);
+			glEnableVertexAttribArray(0);
+			glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+			glEnableVertexAttribArray(1);
+			glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+		}
+		// 绘制纹理
+		mfbo_Shader->use();
+		glBindTexture(GL_TEXTURE_2D, 0);
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, textureID);
+
+		glBindVertexArray(mfbo_VAO);
+		glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+		glBindVertexArray(0);
+	}
 };

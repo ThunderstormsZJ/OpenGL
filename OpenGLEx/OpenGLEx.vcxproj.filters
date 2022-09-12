@@ -131,6 +131,12 @@
     <None Include="Shader\TextureOutLine_FragmentShader.glsl">
       <Filter>资源文件\Shader</Filter>
     </None>
+    <None Include="Shader\FBO_Debugger_VertextShader.glsl">
+      <Filter>资源文件\Shader</Filter>
+    </None>
+    <None Include="Shader\FBO_Debugger_FragmentShader.glsl">
+      <Filter>资源文件\Shader</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="资源文件">

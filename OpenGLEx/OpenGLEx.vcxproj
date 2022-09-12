@@ -147,6 +147,8 @@
   <ItemGroup>
     <None Include="packages.config" />
     <None Include="Shader\common_light_FragmentShader.glsl" />
+    <None Include="Shader\FBO_Debugger_FragmentShader.glsl" />
+    <None Include="Shader\FBO_Debugger_VertextShader.glsl" />
     <None Include="Shader\light_FragmentShader.glsl" />
     <None Include="Shader\light_lamp_FragmentShader.glsl" />
     <None Include="Shader\light_VertextShader.glsl" />

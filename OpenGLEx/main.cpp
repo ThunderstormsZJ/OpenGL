@@ -42,7 +42,7 @@ int main() {
 
 	// 深度测试
 	glEnable(GL_DEPTH_TEST); // 开启
-	glDepthFunc(GL_LESS);
+	//glDepthFunc(GL_LESS);
 	//glDepthFunc(GL_ALWAYS);  // 深度测试方法
 
 	// 模板测试
@@ -53,10 +53,11 @@ int main() {
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-	//glEnable(GL_CULL_FACE); // 开启面剔除功能
-	//glCullFace(GL_FRONT);  // GL_BACK：只剔除背面 GL_FRONT：只剔除正面 GL_FRONT_AND_BACK：剔除背面和正面
+	// 面剔除
+	glEnable(GL_CULL_FACE); // 开启面剔除功能
+	glCullFace(GL_BACK);  // GL_BACK：只剔除背面 GL_FRONT：只剔除正面 GL_FRONT_AND_BACK：剔除背面和正面
 	//glFrontFace(GL_CCW); // GL_CCW: 逆时针 GL_CW: 顺时针 （默认逆时针）
-	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);	// 框线模式
+	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);	// 框线模式
 	
 	OpenGLCommonAPI::PrintSupportExtensions();
 
@@ -72,6 +73,12 @@ int main() {
 	// GL 是从从左到右， 从上到下的逐个像素绘制
 	while (!glfwWindowShouldClose(window))
 	{
+		if (guiTool.ShowPolygonLineMode) {
+			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+		}
+		else {
+			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		}
 		// time
 		float currentFrame = glfwGetTime();
 		deltaTime = currentFrame - lastFrame;
@@ -79,9 +86,6 @@ int main() {
 
 		camera.processInput(window, deltaTime);
 		guiTool.render();
-
-		glClearColor(guiTool.ClearColor.x, guiTool.ClearColor.y, guiTool.ClearColor.z, guiTool.ClearColor.w);
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
 		// scene
 		scene.update(deltaTime);
