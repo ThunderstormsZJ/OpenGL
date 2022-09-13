@@ -5,6 +5,15 @@
 float deltaTime = 0.0f;
 float lastFrame = 0.0f;
 
+// glfw: whenever the window size changed (by OS or user resize) this callback function executes
+// ---------------------------------------------------------------------------------------------
+void framebuffer_size_callback(GLFWwindow* window, int width, int height)
+{
+	// make sure the viewport matches the new window dimensions; note that width and 
+	// height will be significantly larger than specified on retina displays.
+	glViewport(0, 0, width, height);
+}
+
 int main() {
 	/* 
 	GLFW And GLEW RelationShip
@@ -40,6 +49,8 @@ int main() {
 
 	glViewport(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
 
+	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+
 	// 深度测试
 	glEnable(GL_DEPTH_TEST); // 开启
 	//glDepthFunc(GL_LESS);
@@ -64,11 +75,11 @@ int main() {
 	ImGuiTool guiTool(window);
 	Camera camera;
 	camera.processMouseInput(window);
-	Director::GetInstance().Init(window, &camera);
+	Director::GetInstance().Init(window, &camera, &guiTool);
 	
 	// Scene
-	Scene scene(guiTool);
-
+	Scene scene;
+	Director::GetInstance().SetRunScene(&scene);
 
 	// GL 是从从左到右， 从上到下的逐个像素绘制
 	while (!glfwWindowShouldClose(window))

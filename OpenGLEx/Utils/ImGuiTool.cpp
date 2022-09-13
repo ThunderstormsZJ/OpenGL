@@ -1,52 +1,25 @@
 #include "ImGuiTool.h"
+#include "../Common/GlobalSettingCenter.hpp"
 
-ImGuiTool::ImGuiTool(GLFWwindow* context) :m_context(context)
-{
-	init();
-}
+#pragma region Tab
 
-void ImGuiTool::init()
-{
-	// Set ImGui Context
-	IMGUI_CHECKVERSION();
-	ImGui::CreateContext();
-	// Set Style
-	ImGui::StyleColorsDark();
-	// Bind OpenGL And Init
-	ImGui_ImplGlfw_InitForOpenGL(m_context, true);
-	ImGui_ImplOpenGL3_Init();
+class TabItemSceneConfig : public ImGuiTabItem {
+public:
+	TabItemSceneConfig(std::string label):ImGuiTabItem(label) {
+	
+	}
 
-	ImGuiIO io = ImGui::GetIO();
-
-	// 字体
-	io.Fonts->AddFontFromFileTTF("Resources/fonts/WenDaoLingFeiXiaoKai-2.ttf", 16.0f, NULL, io.Fonts->GetGlyphRangesChineseFull());
-}
-
-void ImGuiTool::render()
-{
-	// Start ImGui Frame
-	ImGui_ImplOpenGL3_NewFrame();
-	ImGui_ImplGlfw_NewFrame();
-	ImGui::NewFrame();
-
-	{
-		//Content
-		ImGui::Begin("OpenGL Tools");
-
-		if (ImGui::Checkbox(u8"线框模式", &ShowPolygonLineMode)) {
-
-		}
-
+	void Draw(ImGuiTool* tool) {
 		if (ImGui::CollapsingHeader("Windows Config")) {
-			ImGui::ColorEdit4("Clear Color", glm::value_ptr(ClearColor));
+			ImGui::ColorEdit4("Clear Color", glm::value_ptr(tool->ClearColor));
 		}
 
 		if (ImGui::CollapsingHeader("Cube Config")) {
-			ImGui::ColorEdit3("Color", glm::value_ptr(ObjectColor));
+			ImGui::ColorEdit3("Color", glm::value_ptr(tool->ObjectColor));
 		}
 
 		if (ImGui::CollapsingHeader("Material Config")) {
-			ImGui::SliderInt("Shininess", &material.Shininess, 4, 248);
+			ImGui::SliderInt("Shininess", &tool->material.Shininess, 4, 248);
 		}
 
 		if (ImGui::CollapsingHeader("Light Config")) {
@@ -55,15 +28,15 @@ void ImGuiTool::render()
 				if (ImGui::BeginTabItem("PointLight"))
 				{
 					std::vector<PointLight>* pointLights = Director::GetInstance().GetPPointLights();
-					if (ImGui::Button("Add Point Light") && pointLightCount < NR_POINT_LIGHTS) {
-						pointLightCount += 1;
+					if (ImGui::Button("Add Point Light") && tool->PointLightCount < NR_POINT_LIGHTS) {
+						tool->PointLightCount += 1;
 
-						if (pointLightChangeCallback) {
-							pointLightChangeCallback(pointLightCount);
+						if (tool->pointLightChangeCallback) {
+							tool->pointLightChangeCallback(tool->PointLightCount);
 						}
 					}
 
-					for (int i = 0; i < pointLightCount; i++)
+					for (int i = 0; i < tool->PointLightCount; i++)
 					{
 						char label[32]; sprintf_s(label, "Point Light[%d]", i + 1);
 						if (ImGui::TreeNode(label)) {
@@ -135,6 +108,69 @@ void ImGuiTool::render()
 			}
 
 		}
+	}
+};
+
+class TabItemPostProcess : public ImGuiTabItem {
+public:
+	TabItemPostProcess(std::string label) :ImGuiTabItem(label) {
+
+	}
+
+	void Draw(ImGuiTool* tool) {
+		GlobalSettingCenter* setting = &GlobalSettingCenter::GetInstance();
+		ImGui::Checkbox(u8"开启帧缓冲", &setting->FrameBuffEnable);
+
+		const char* items[] = PostProcessTypeText;
+		ImGui::Combo(u8"效果", &setting->PostPrecessTypeValue, items, IM_ARRAYSIZE(items));
+	}
+};
+
+#pragma endregion
+
+
+ImGuiTool::ImGuiTool(GLFWwindow* context) :m_context(context)
+{
+	init();
+}
+
+void ImGuiTool::init()
+{
+	// Set ImGui Context
+	IMGUI_CHECKVERSION();
+	ImGui::CreateContext();
+	// Set Style
+	ImGui::StyleColorsDark();
+	// Bind OpenGL And Init
+	ImGui_ImplGlfw_InitForOpenGL(m_context, true);
+	ImGui_ImplOpenGL3_Init();
+
+	ImGuiIO io = ImGui::GetIO();
+
+	// 字体
+	io.Fonts->AddFontFromFileTTF("Resources/fonts/WenDaoLingFeiXiaoKai-2.ttf", 16.0f, NULL, io.Fonts->GetGlyphRangesChineseFull());
+
+	m_tab = new ImGuiTab("OpenGL TabBar");
+	m_tab->AddItem(new TabItemSceneConfig(u8"场景设置"));
+	m_tab->AddItem(new TabItemPostProcess(u8"后处理效果"));
+}
+
+void ImGuiTool::render()
+{
+	// Start ImGui Frame
+	ImGui_ImplOpenGL3_NewFrame();
+	ImGui_ImplGlfw_NewFrame();
+	ImGui::NewFrame();
+
+	{
+		//Content
+		ImGui::Begin("OpenGL Tools");
+
+		if (ImGui::Checkbox(u8"线框模式", &ShowPolygonLineMode)) {
+
+		}
+
+		m_tab->Draw(this);
 
 		ImGui::End();
 	}

@@ -147,8 +147,8 @@
   <ItemGroup>
     <None Include="packages.config" />
     <None Include="Shader\common_light_FragmentShader.glsl" />
-    <None Include="Shader\FBO_Debugger_FragmentShader.glsl" />
-    <None Include="Shader\FBO_Debugger_VertextShader.glsl" />
+    <None Include="Shader\FBO_FragmentShader.glsl" />
+    <None Include="Shader\FBO_VertextShader.glsl" />
     <None Include="Shader\light_FragmentShader.glsl" />
     <None Include="Shader\light_lamp_FragmentShader.glsl" />
     <None Include="Shader\light_VertextShader.glsl" />
@@ -159,6 +159,7 @@
     <None Include="Shader\Texture_VertextShader.glsl" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Common\GlobalSettingCenter.hpp" />
     <ClInclude Include="Common\StructCollect.h" />
     <ClInclude Include="Common\Templates.h" />
     <ClInclude Include="Main.h" />

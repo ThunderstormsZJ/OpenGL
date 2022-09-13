@@ -7,11 +7,16 @@
 
 #define NR_POINT_LIGHTS 4
 
+class Scene;
+class ImGuiTool;
+
 class Director: public Singleton<Director>
 {
 public:
 	GLFWwindow* Window;
 	Camera* MainCamera;
+	Scene* CurrentScene;
+	ImGuiTool* GuiTool;
 
 	~Director() {}
 
@@ -19,11 +24,16 @@ public:
 	SpotLight* GetPSpotLight() { return &spotLight; }
 	std::vector<PointLight>* GetPPointLights() { return &pointLights; }
 
-	void Init(GLFWwindow* window, Camera* camera) {
+	void Init(GLFWwindow* window, Camera* camera, ImGuiTool* guiTool) {
 		this->Window = window;
 		this->MainCamera = camera;
+		this->GuiTool = guiTool;
 
 		InitLight();
+	}
+
+	void SetRunScene(Scene* scene) {
+		this->CurrentScene = scene;
 	}
 
 	void InitLight() {
@@ -44,6 +54,7 @@ public:
 		dirLight.Diffuse = 0.4f;
 		dirLight.Specular = 0.5f;
 		dirLight.Direction = glm::vec3(-0.2f, -1.0f, -0.3f);
+		dirLight.IsOpen = true;
 		this->dirLight = dirLight;
 
 		// init spotLight

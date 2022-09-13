@@ -68,3 +68,14 @@ enum class CubeType
 	Panel,
 	Transparent,
 };
+
+#define PostProcessTypeText {u8"无", u8"反相", u8"灰度", u8"锐化", u8"模糊", u8"边缘检测"}
+
+enum class PostProcessType {
+	None, 
+	Inversion, // 反相
+	Grayscale, // 灰度
+	SharpenKernel, // 锐化
+	BlurKernel, // 模糊
+	EdgeKernel, // 边缘检测
+};

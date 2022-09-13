@@ -3,6 +3,7 @@
 #include "Cube.h"
 #include "LightCube.hpp"
 #include "Model.h"
+#include "../Common/GlobalSettingCenter.hpp"
 
 #define MODE_TAG_LIGHT "LIGHT"
 #define MODE_TAG_TRANSPARENT "TRANSPARENT"
@@ -10,9 +11,11 @@
 class Scene
 {
 public:
-	Scene(ImGuiTool& tool)
-		:m_tool(tool)
+	Scene()
 	{
+		this->m_tool = Director::GetInstance().GuiTool;
+		this->m_FrameBuffEnable = GlobalSettingCenter::GetInstance().FrameBuffEnable;
+
 		initEvent();
 		this->CreateFrameBuffer();
 
@@ -33,12 +36,12 @@ public:
 
 		auto box = std::make_shared<Cube>(shader, CubeType::Box);
 		box->SetPosition(glm::vec3(-1.0f, 0.0f, -1.0f));
-		box->SetTexture("Resources/marble.jpg", "texture1");
+		box->SetTexture("Resources/container.jpg", "texture1", GL_CLAMP_TO_EDGE);
 		addChild(box);
 		
 		box = std::make_shared<Cube>(shader, CubeType::Box);
 		box->SetPosition(glm::vec3(2.0f, 0.0f, 0.0f));
-		box->SetTexture("Resources/marble.jpg", "texture1");
+		box->SetTexture("Resources/container.jpg", "texture1", GL_CLAMP_TO_EDGE);
 		addChild(box);
 
 		// 草
@@ -84,7 +87,7 @@ public:
 		for (int i = 0; i < cubePositions.size(); i++)
 		{
 			auto box = std::make_shared<Cube>(shader);
-			box->SetMaterial(&m_tool.material);
+			box->SetMaterial(&m_tool->material);
 			box->SetPosition(cubePositions[i]);
 			box->SetRotate(i * 10, glm::vec3(1, 1, 1));
 			box->SetTexture("Resources/container2.png", "material.texture_diffuse1");
@@ -111,7 +114,7 @@ public:
 
 	void initEvent() {
 		// 监听点光源增加事件
-		m_tool.onPointLightChange([=](int count) {
+		m_tool->onPointLightChange([=](int count) {
 			removeChildrenByTag("lamp");
 
 			std::vector<PointLight>* pointLights = Director::GetInstance().GetPPointLights();
@@ -183,7 +186,7 @@ public:
 		if (fbo != 0)
 			glBindFramebuffer(GL_FRAMEBUFFER, fbo);
 		glEnable(GL_DEPTH_TEST); // enable depth testing (is disabled for rendering screen-space quad)
-		glClearColor(m_tool.ClearColor.x, m_tool.ClearColor.y, m_tool.ClearColor.z, m_tool.ClearColor.w);
+		glClearColor(m_tool->ClearColor.x, m_tool->ClearColor.y, m_tool->ClearColor.z, m_tool->ClearColor.w);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
 		for (auto begin = m_childrenModel.begin(); begin != m_childrenModel.end(); begin++)
@@ -191,6 +194,7 @@ public:
 			(*begin)->Render();
 		}
 
+		this->CheckFrameBuffStatus();
 		this->DisplayFramebufferTexture(mfbo_texture);
 	}
 	void update(float delataTime) {
@@ -208,7 +212,7 @@ public:
 
 private:
 	// 自定义帧缓冲
-	bool FreamBuffEnable = true;
+	bool m_FrameBuffEnable = false;
 	unsigned int mfbo_VAO = 0;
 	unsigned int mfbo_VBO;
 	unsigned int mfbo_texture;
@@ -216,7 +220,7 @@ private:
 	unsigned int fbo = 0;
 
 	std::vector<std::shared_ptr<Node>> m_childrenModel;
-	ImGuiTool& m_tool;
+	ImGuiTool* m_tool;
 
 	// 箱子位置
 	std::vector<glm::vec3> cubePositions = {
@@ -250,10 +254,10 @@ private:
 
 	// 创建一个帧缓冲，并写入到纹理附件当中
 	void CreateFrameBuffer() {
-		if (!this->FreamBuffEnable)
+		if (!this->m_FrameBuffEnable)
 			return;
 
-		mfbo_Shader = new Shader("Shader/FBO_Debugger_VertextShader.glsl", "Shader/FBO_Debugger_FragmentShader.glsl");
+		mfbo_Shader = new Shader("Shader/FBO_VertextShader.glsl", "Shader/FBO_FragmentShader.glsl");
 
 		glGenFramebuffers(1, &fbo);
 		glBindFramebuffer(GL_FRAMEBUFFER, fbo);
@@ -296,8 +300,9 @@ private:
 	// 绘制帧缓冲的纹理附件
 	void DisplayFramebufferTexture(GLuint textureID)
 	{
-		if (!this->FreamBuffEnable)
+		if (!this->m_FrameBuffEnable) {
 			return;
+		}
 
 		glBindFramebuffer(GL_FRAMEBUFFER, 0); // 返回默认渲染
 		glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
@@ -328,6 +333,7 @@ private:
 		}
 		// 绘制纹理
 		mfbo_Shader->use();
+		mfbo_Shader->setInt("PostProcessType", GlobalSettingCenter::GetInstance().PostPrecessTypeValue);
 		glBindTexture(GL_TEXTURE_2D, 0);
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, textureID);
@@ -335,5 +341,23 @@ private:
 		glBindVertexArray(mfbo_VAO);
 		glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 		glBindVertexArray(0);
+	}
+
+	void CheckFrameBuffStatus() {
+		if (this->m_FrameBuffEnable != GlobalSettingCenter::GetInstance().FrameBuffEnable) {
+			this->m_FrameBuffEnable = GlobalSettingCenter::GetInstance().FrameBuffEnable;
+
+			// 关闭
+			if (!this->m_FrameBuffEnable) {
+				glBindFramebuffer(GL_FRAMEBUFFER, 0);
+				glClear(GL_COLOR_BUFFER_BIT);
+				this->fbo = 0;
+			}
+
+			// 开启
+			if (this->m_FrameBuffEnable) {
+				this->CreateFrameBuffer();
+			}
+		}
 	}
 };
