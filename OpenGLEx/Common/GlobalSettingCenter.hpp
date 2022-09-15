@@ -7,8 +7,10 @@
 class GlobalSettingCenter: public Singleton<GlobalSettingCenter>
 {
 public:
+	bool ShowPolygonLineMode = false; // 线框模式
+	bool CullFaceEnable = false; // 面剔除
 	// 后期处理
-	bool FrameBuffEnable = true;
+	bool FrameBuffEnable = false;
 	int PostPrecessTypeValue = 0;
 };
 

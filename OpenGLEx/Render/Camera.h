@@ -29,7 +29,7 @@ public:
 
 	// ASDAÉÏÏÂ×óÓÒ²Ù×÷
 	void processInput(GLFWwindow* window, float deltaTime) {
-		float moveSpeed = 2.5f * deltaTime;
+		float moveSpeed = 1.5f * deltaTime;
 		if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
 			m_cameraPos += m_cameraFont * moveSpeed;
 		}

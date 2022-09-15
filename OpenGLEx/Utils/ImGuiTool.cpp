@@ -166,9 +166,11 @@ void ImGuiTool::render()
 		//Content
 		ImGui::Begin("OpenGL Tools");
 
-		if (ImGui::Checkbox(u8"线框模式", &ShowPolygonLineMode)) {
+		GlobalSettingCenter* setting = &GlobalSettingCenter::GetInstance();
 
-		}
+		ImGui::Checkbox(u8"线框模式", &setting->ShowPolygonLineMode);
+		ImGui::SameLine();
+		ImGui::Checkbox(u8"面剔除", &setting->CullFaceEnable);
 
 		m_tab->Draw(this);
 

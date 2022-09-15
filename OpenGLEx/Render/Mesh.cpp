@@ -1,6 +1,6 @@
 #include "Mesh.h"
 
-Mesh::Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<Texture> textures)
+Mesh::Mesh(std::vector<Vertex> vertices, std::vector<GLuint> indices, std::vector<Texture> textures)
 {
 	this->vertices = vertices;
 	this->indices = indices;
@@ -9,10 +9,20 @@ Mesh::Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std:
 	setupMesh();
 }
 
+Mesh::Mesh(std::vector<Vertex> vertices, std::vector<GLuint> indices)
+{
+	this->vertices = vertices;
+	this->indices = indices;
+
+	setupMesh();
+}
+
+Mesh::~Mesh()
+{
+}
+
 void Mesh::Draw(Shader& shader)
 {
-	glBindVertexArray(VAO);
-
 	/* 绑定纹理贴图 */
 	//texture_diffuse
 	//texture_specular
@@ -46,6 +56,18 @@ void Mesh::Draw(Shader& shader)
 	glBindVertexArray(VAO);
 	glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0); // 根据EBO索引缓存进行绘制
 	glBindVertexArray(0);
+}
+
+void Mesh::AddTexture(Texture texture)
+{
+	this->textures.push_back(texture);
+}
+
+void Mesh::Dispose()
+{
+	glDeleteVertexArrays(1, &VAO);
+	glDeleteBuffers(1, &VBO);
+	glDeleteBuffers(1, &EBO);
 }
 
 void Mesh::setupMesh()

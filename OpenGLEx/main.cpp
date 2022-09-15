@@ -1,5 +1,6 @@
 #include "Main.h"
 #include "Utils/OpenGLCommonAPI.h"
+#include "Common/GlobalSettingCenter.hpp"
 
 // 时间差
 float deltaTime = 0.0f;
@@ -68,7 +69,7 @@ int main() {
 	glEnable(GL_CULL_FACE); // 开启面剔除功能
 	glCullFace(GL_BACK);  // GL_BACK：只剔除背面 GL_FRONT：只剔除正面 GL_FRONT_AND_BACK：剔除背面和正面
 	//glFrontFace(GL_CCW); // GL_CCW: 逆时针 GL_CW: 顺时针 （默认逆时针）
-	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);	// 框线模式
+	//glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);	// 框线模式
 	
 	OpenGLCommonAPI::PrintSupportExtensions();
 
@@ -84,12 +85,20 @@ int main() {
 	// GL 是从从左到右， 从上到下的逐个像素绘制
 	while (!glfwWindowShouldClose(window))
 	{
-		if (guiTool.ShowPolygonLineMode) {
+		if (GlobalSettingCenter::GetInstance().ShowPolygonLineMode) {
 			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 		}
 		else {
 			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 		}
+
+		if (GlobalSettingCenter::GetInstance().CullFaceEnable) {
+			glEnable(GL_CULL_FACE);
+		}
+		else {
+			glDisable(GL_CULL_FACE);
+		}
+
 		// time
 		float currentFrame = glfwGetTime();
 		deltaTime = currentFrame - lastFrame;

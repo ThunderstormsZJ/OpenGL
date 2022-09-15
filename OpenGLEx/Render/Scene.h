@@ -2,6 +2,8 @@
 #include "Camera.h"
 #include "Cube.h"
 #include "LightCube.hpp"
+#include "SykBox.hpp"
+#include "Sphere.hpp"
 #include "Model.h"
 #include "../Common/GlobalSettingCenter.hpp"
 
@@ -18,6 +20,7 @@ public:
 
 		initEvent();
 		this->CreateFrameBuffer();
+		//this->LoadSkyBox();
 
 		//createTextureCueBox();
 		//createLightCueBox();
@@ -27,22 +30,28 @@ public:
 
 	void createCubePanel() {
 
+
 		Shader shader("Shader/Texture_VertextShader.glsl", "Shader/Texture_FragmentShader.glsl");
 
-		auto panel = std::make_shared<Cube>(shader, CubeType::Panel);
-		panel->SetPosition(glm::vec3(0));
-		panel->SetTexture("Resources/metal.png", "texture1");
-		addChild(panel);
+		//auto panel = std::make_shared<Cube>(shader, CubeType::Panel);
+		//panel->SetPosition(glm::vec3(0));
+		//panel->SetTexture("Resources/metal.png", "texture1");
+		//addChild(panel);
 
-		auto box = std::make_shared<Cube>(shader, CubeType::Box);
-		box->SetPosition(glm::vec3(-1.0f, 0.0f, -1.0f));
-		box->SetTexture("Resources/container.jpg", "texture1", GL_CLAMP_TO_EDGE);
-		addChild(box);
-		
-		box = std::make_shared<Cube>(shader, CubeType::Box);
-		box->SetPosition(glm::vec3(2.0f, 0.0f, 0.0f));
-		box->SetTexture("Resources/container.jpg", "texture1", GL_CLAMP_TO_EDGE);
-		addChild(box);
+		//auto box = std::make_shared<Cube>(shader, CubeType::Box);
+		//box->SetPosition(glm::vec3(-1.0f, 0.0f, -1.0f));
+		//box->SetTexture("Resources/container.jpg", "texture1", GL_CLAMP_TO_EDGE);
+		//addChild(box);
+		//
+		//box = std::make_shared<Cube>(shader, CubeType::Box);
+		//box->SetPosition(glm::vec3(2.0f, 0.0f, 0.0f));
+		//box->SetTexture("Resources/container.jpg", "texture1", GL_CLAMP_TO_EDGE);
+		//addChild(box);
+
+		Shader sphereShader("Shader/model_VertextShader.glsl", "Shader/model_FragmentShader.glsl");
+		auto sphere = std::make_shared<Sphere>(sphereShader);
+		sphere->SetTexture("Resources/Earth.png");
+		addChild(sphere);
 
 		// ≤›
 		// transparent vegetation locations
@@ -89,7 +98,7 @@ public:
 			auto box = std::make_shared<Cube>(shader);
 			box->SetMaterial(&m_tool->material);
 			box->SetPosition(cubePositions[i]);
-			box->SetRotate(i * 10, glm::vec3(1, 1, 1));
+			box->SetRotate(i * 10, i * 10, i * 10);
 			box->SetTexture("Resources/container2.png", "material.texture_diffuse1");
 			box->SetTexture("Resources/container2_specular.png", "material.texture_specular1");
 			addChild(box);
@@ -105,7 +114,7 @@ public:
 			auto cube = std::make_shared<Cube>(shader);
 			cube->GetShader()->setFloat("mixValue", 0.2f);
 			cube->SetPosition(cubePositions[i]);
-			cube->SetRotate(i * 10, glm::vec3(1, 1, 1));
+			cube->SetRotate(i * 10, i * 10, i * 10);
 			cube->SetTexture("Resources/container.jpg", "texture1");
 			cube->SetTexture("Resources/awesomeface.png", "texture2");
 			addChild(cube);
@@ -351,6 +360,7 @@ private:
 			if (!this->m_FrameBuffEnable) {
 				glBindFramebuffer(GL_FRAMEBUFFER, 0);
 				glClear(GL_COLOR_BUFFER_BIT);
+				glDeleteFramebuffers(1, &fbo);
 				this->fbo = 0;
 			}
 
@@ -359,5 +369,24 @@ private:
 				this->CreateFrameBuffer();
 			}
 		}
+	}
+
+	void LoadSkyBox() {
+		std::vector<std::string> faces {
+			"Resources/skybox/right.jpg",
+			"Resources/skybox/left.jpg",
+			"Resources/skybox/top.jpg",
+			"Resources/skybox/bottom.jpg",
+			"Resources/skybox/front.jpg",
+			"Resources/skybox/back.jpg"
+		};
+
+		// º”‘ÿÃ˘Õº
+		unsigned int cubeMapId = ImgCache::GetInstance().addCubeMap(faces);
+		Shader shader("Shader/SkyBox_VertextShader.glsl", "Shader/SkyBox_FragmentShader.glsl");
+
+		auto box = std::make_shared<SkyBox>(shader, cubeMapId);
+
+		this->addChild(box);
 	}
 };

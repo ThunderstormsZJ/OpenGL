@@ -92,7 +92,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>..\..\OpenGLLib\imgui;..\..\OpenGLLib\glm\glm;..\..\OpenGLLib\glfw-3.3.3.bin.WIN64\include;..\..\OpenGLLib\glew-2.1.0\include;..\..\OpenGLLib\assimp\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\OpenGLLib\imgui;..\..\OpenGLLib\glm\glm\gtx;..\..\OpenGLLib\glm\glm;..\..\OpenGLLib\glfw-3.3.3.bin.WIN64\include;..\..\OpenGLLib\glew-2.1.0\include;..\..\OpenGLLib\assimp\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>..\x64\Debug;..\..\OpenGLLib\glfw-3.3.3.bin.WIN64\lib-vc2019;..\..\OpenGLLib\glew-2.1.0\lib\Release\x64;..\..\OpenGLLib\assimp\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
@@ -154,6 +154,8 @@
     <None Include="Shader\light_VertextShader.glsl" />
     <None Include="Shader\model_FragmentShader.glsl" />
     <None Include="Shader\model_VertextShader.glsl" />
+    <None Include="Shader\SkyBox_FragmentShader.glsl" />
+    <None Include="Shader\SkyBox_VertextShader.glsl" />
     <None Include="Shader\TextureOutLine_FragmentShader.glsl" />
     <None Include="Shader\Texture_FragmentShader.glsl" />
     <None Include="Shader\Texture_VertextShader.glsl" />
@@ -172,6 +174,8 @@
     <ClInclude Include="Render\Node.h" />
     <ClInclude Include="Render\Scene.h" />
     <ClInclude Include="Render\Shader.h" />
+    <ClInclude Include="Render\Sphere.hpp" />
+    <ClInclude Include="Render\SykBox.hpp" />
     <ClInclude Include="stb_image.h" />
     <ClInclude Include="Utils\ImgCache.hpp" />
     <ClInclude Include="Utils\ImGuiTool.h" />

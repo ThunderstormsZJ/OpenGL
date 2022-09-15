@@ -2,6 +2,7 @@
 #include "Director.h"
 #include "Shader.h"
 #include "../Utils/Logger.hpp"
+#include <rotate_vector.hpp>
 
 class Node
 {
@@ -30,23 +31,42 @@ public:
 
 	void SetPosition(glm::vec3 pos) {
 		this->position = pos;
+		this->transMat = glm::translate(glm::mat4(1.0f), position);
 	}
 
 	void SetScale(float scale) {
 		this->scale = glm::vec3(scale);
+		this->scaleMat = glm::scale(glm::mat4(1.0f), this->scale);
 	}
 
 	void SetScale(float x, float y, float z) {
 		this->scale = glm::vec3(x, y, z);
+		this->scaleMat = glm::scale(glm::mat4(1.0f), this->scale);
 	}
 
-	void SetRotate(float angle, glm::vec3 axis) {
-		this->rotateAngle = angle;
-		this->rotateAxis = axis;
+	void SetRotate(float x = 0, float y = 0, float z = 0) {
+		this->rotateAngle = glm::vec3(x, y, z);
+		this->rotateMat = glm::rotate(glm::mat4(1.0f), glm::radians(x), glm::vec3(1, 0, 0));
+		this->rotateMat = glm::rotate(this->rotateMat, glm::radians(y), glm::vec3(0, 1, 0));
+		this->rotateMat = glm::rotate(this->rotateMat, glm::radians(z), glm::vec3(0, 0, 1));
 	}
 
 	void SetColor(glm::vec3 color) {
 		this->color = color;
+	}
+
+	void Rotate(float x = 0, float y = 0, float z = 0) {
+		this->rotateAngle += glm::vec3(x, y, z);
+
+		// 全局坐标轴转换
+		glm::vec3 xNorm(1.0, 0.0f, 0.0);
+		glm::vec3 yNorm(0.0, 1.0f, 0.0);
+		glm::vec3 zNorm(0.0, 0.0f, 1.0);
+		this->rotateMat = glm::rotate(this->rotateMat, glm::radians(x), xNorm); // Rotate on X axis
+		yNorm = glm::rotate(yNorm, glm::radians(-this->rotateAngle.x), xNorm);
+		this->rotateMat = glm::rotate(this->rotateMat, glm::radians(y), yNorm); // Rotate on Y axis
+		zNorm = glm::rotate(zNorm, glm::radians(-this->rotateAngle.y), yNorm);
+		this->rotateMat = glm::rotate(this->rotateMat, glm::radians(z), zNorm); // Rotate on Z axis
 	}
 
 	void SetName(std::string v) { name = v; }
@@ -71,12 +91,13 @@ private:
 	glm::vec3 position = glm::vec3(0);
 	glm::vec3 color = glm::vec3(0);
 	glm::vec3 scale = glm::vec3(1);
-	glm::vec3 rotateAxis = glm::vec3(1);
-	float rotateAngle = 0;
+	glm::vec3 rotateAngle = glm::vec3(0);
 
 	Material* material;
 
-	glm::mat4 modelMatrix = glm::mat4(1.0f);	// Model Matrix
+	glm::mat4 transMat = glm::mat4(1.0f);
+	glm::mat4 scaleMat = glm::mat4(1.0f);
+	glm::mat4 rotateMat = glm::mat4(1.0f);
 
 	/* Other Property */
 	std::string name;
@@ -85,9 +106,7 @@ private:
 	void updateMatrixRender() {
 		// 缩放 -> 旋转 -> 位移
 		// 代码中得顺序相反
-		modelMatrix = glm::translate(glm::mat4(1.0f), position);
-		modelMatrix = glm::rotate(modelMatrix, glm::radians(rotateAngle), rotateAxis);
-		modelMatrix = glm::scale(modelMatrix, scale);
+		glm::mat4 modelMatrix = transMat * rotateMat * scaleMat;
 
 		Camera* camera = Director::GetInstance().MainCamera;
 		glm::mat4 projection = glm::perspective(glm::radians(camera->getFov()), (float)WINDOW_WIDTH / (float)WINDOW_HEIGHT, 0.1f, 100.0f);

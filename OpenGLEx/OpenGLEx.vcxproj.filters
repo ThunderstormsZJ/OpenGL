@@ -81,6 +81,12 @@
     <ClInclude Include="Common\GlobalSettingCenter.hpp">
       <Filter>头文件\Common</Filter>
     </ClInclude>
+    <ClInclude Include="Render\SykBox.hpp">
+      <Filter>头文件\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="Render\Sphere.hpp">
+      <Filter>头文件\Render</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Resources\awesomeface.png">
@@ -138,6 +144,12 @@
       <Filter>资源文件\Shader</Filter>
     </None>
     <None Include="Shader\FBO_FragmentShader.glsl">
+      <Filter>资源文件\Shader</Filter>
+    </None>
+    <None Include="Shader\SkyBox_FragmentShader.glsl">
+      <Filter>资源文件\Shader</Filter>
+    </None>
+    <None Include="Shader\SkyBox_VertextShader.glsl">
       <Filter>资源文件\Shader</Filter>
     </None>
   </ItemGroup>
