@@ -20,38 +20,39 @@ public:
 
 		initEvent();
 		this->CreateFrameBuffer();
-		//this->LoadSkyBox();
+		this->LoadSkyBox();
 
 		//createTextureCueBox();
 		//createLightCueBox();
-		createCubePanel(); 
+		//createCubePanel(); 
 		//createNanosuitModel(); // Ä£ÐÍ
+		createEnvironmentMapModel();
+	}
+
+	void createEnvironmentMapModel() {
+		Shader shader("Shader/Skybox_Model_VertextShader.glsl", "Shader/Skybox_Model_FragmentShader.glsl");
+		auto box = std::make_shared<Cube>(shader, CubeType::Box);
+		box->SetCueMap(m_cubeMapId);
+		addChild(box);
 	}
 
 	void createCubePanel() {
-
-
 		Shader shader("Shader/Texture_VertextShader.glsl", "Shader/Texture_FragmentShader.glsl");
 
-		//auto panel = std::make_shared<Cube>(shader, CubeType::Panel);
-		//panel->SetPosition(glm::vec3(0));
-		//panel->SetTexture("Resources/metal.png", "texture1");
-		//addChild(panel);
+		auto panel = std::make_shared<Cube>(shader, CubeType::Panel);
+		panel->SetPosition(glm::vec3(0));
+		panel->SetTexture("Resources/metal.png", "texture1");
+		addChild(panel);
 
-		//auto box = std::make_shared<Cube>(shader, CubeType::Box);
-		//box->SetPosition(glm::vec3(-1.0f, 0.0f, -1.0f));
-		//box->SetTexture("Resources/container.jpg", "texture1", GL_CLAMP_TO_EDGE);
-		//addChild(box);
-		//
-		//box = std::make_shared<Cube>(shader, CubeType::Box);
-		//box->SetPosition(glm::vec3(2.0f, 0.0f, 0.0f));
-		//box->SetTexture("Resources/container.jpg", "texture1", GL_CLAMP_TO_EDGE);
-		//addChild(box);
-
-		Shader sphereShader("Shader/model_VertextShader.glsl", "Shader/model_FragmentShader.glsl");
-		auto sphere = std::make_shared<Sphere>(sphereShader);
-		sphere->SetTexture("Resources/Earth.png");
-		addChild(sphere);
+		auto box = std::make_shared<Cube>(shader, CubeType::Box);
+		box->SetPosition(glm::vec3(-1.0f, 0.0f, -1.0f));
+		box->SetTexture("Resources/container.jpg", "texture1", GL_CLAMP_TO_EDGE);
+		addChild(box);
+		
+		box = std::make_shared<Cube>(shader, CubeType::Box);
+		box->SetPosition(glm::vec3(2.0f, 0.0f, 0.0f));
+		box->SetTexture("Resources/container.jpg", "texture1", GL_CLAMP_TO_EDGE);
+		addChild(box);
 
 		// ²Ý
 		// transparent vegetation locations
@@ -228,6 +229,8 @@ private:
 	Shader* mfbo_Shader;
 	unsigned int fbo = 0;
 
+
+	GLuint m_cubeMapId;
 	std::vector<std::shared_ptr<Node>> m_childrenModel;
 	ImGuiTool* m_tool;
 
@@ -382,10 +385,10 @@ private:
 		};
 
 		// ¼ÓÔØÌùÍ¼
-		unsigned int cubeMapId = ImgCache::GetInstance().addCubeMap(faces);
+		m_cubeMapId = ImgCache::GetInstance().addCubeMap(faces);
 		Shader shader("Shader/SkyBox_VertextShader.glsl", "Shader/SkyBox_FragmentShader.glsl");
 
-		auto box = std::make_shared<SkyBox>(shader, cubeMapId);
+		auto box = std::make_shared<SkyBox>(shader, m_cubeMapId);
 
 		this->addChild(box);
 	}

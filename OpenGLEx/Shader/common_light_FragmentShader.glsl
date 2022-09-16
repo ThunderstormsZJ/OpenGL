@@ -9,6 +9,8 @@ struct Material{
 	int shininess;
 };
 
+uniform samplerCube skybox; // 天空盒
+
 // 点光源
 struct PointLight {
 	int isOpen;
@@ -59,6 +61,7 @@ uniform SpotLight spotLight;
 in mat4 ViewMat;
 in vec2 TexCoord;
 in vec3 FragPos;
+in vec3 Normal;
 
 // function prototypes
 //vec3 CalcDirLight(DirLight light, vec3 normal, vec3 viewDir);
@@ -149,4 +152,19 @@ vec3 CalcSpotLight(vec3 normal, vec3 viewDir){
 	specular *= intensity;
 
 	return (ambient + diffuse + specular) * attenuation;
+}
+
+// 天空盒反射
+vec3 CalcSkyBoxReflectEnvironmentMap(vec3 normal, vec3 dir){
+	vec3 R = reflect(dir, normal);
+	vec4 result = texture(skybox, R);
+	return result.rgb;
+}
+
+// 天空盒折射
+vec3 CalcSkyBoxRefractEnvironmentMap(vec3 normal, vec3 dir){
+	float ratio = 1.00 / 1.52;// 折射率
+	vec3 R = refract(dir, normal, ratio);
+	vec4 result = texture(skybox, R);
+	return result.rgb;
 }

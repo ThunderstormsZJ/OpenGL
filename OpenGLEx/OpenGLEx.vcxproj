@@ -151,8 +151,10 @@
     <None Include="Shader\FBO_VertextShader.glsl" />
     <None Include="Shader\light_FragmentShader.glsl" />
     <None Include="Shader\light_lamp_FragmentShader.glsl" />
+    <None Include="Shader\Skybox_Model_VertextShader.glsl" />
     <None Include="Shader\light_VertextShader.glsl" />
     <None Include="Shader\model_FragmentShader.glsl" />
+    <None Include="Shader\Skybox_Model_FragmentShader.glsl" />
     <None Include="Shader\model_VertextShader.glsl" />
     <None Include="Shader\SkyBox_FragmentShader.glsl" />
     <None Include="Shader\SkyBox_VertextShader.glsl" />

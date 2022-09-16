@@ -170,6 +170,8 @@ public:
 			glBindTexture(GL_TEXTURE_2D, textures[i].Id);
 			//glActiveTexture(GL_TEXTURE0);
 		}
+		Camera* camera = Director::GetInstance().MainCamera;
+		shader.setVec3("cameraPos", glm::value_ptr(camera->getPos()));
 
 		//  在循环中绑定是 用于多个物体绘制的情况
 		glBindVertexArray(VAO);

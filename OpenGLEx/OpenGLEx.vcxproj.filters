@@ -152,6 +152,12 @@
     <None Include="Shader\SkyBox_VertextShader.glsl">
       <Filter>资源文件\Shader</Filter>
     </None>
+    <None Include="Shader\Skybox_Model_FragmentShader.glsl">
+      <Filter>资源文件\Shader</Filter>
+    </None>
+    <None Include="Shader\Skybox_Model_VertextShader.glsl">
+      <Filter>资源文件\Shader</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="资源文件">

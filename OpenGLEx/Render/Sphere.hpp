@@ -25,6 +25,7 @@ public:
 		Texture texture;
 		texture.Id = ImgCache::GetInstance().addTexture(imgPath, param);	// º”‘ÿÕº∆¨
 		texture.Name = "texture_normal";
+		texture.Type = "texture_normal";
 		texture.Path = imgPath;
 
 		for (int i = 0; i < this->m_meshs.size(); i++)

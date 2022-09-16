@@ -74,10 +74,20 @@ public:
 	void SetTag(std::string v) { tag = v; }
 	std::string GetTag() { return tag; }
 
+	void SetCueMap(GLuint textureId) {
+		Texture texture;
+		texture.Id = textureId;
+		texture.Name = "skybox";
+		texture.Type = "skybox";
+
+		skyBoxTexture = texture;
+	}
+
 	virtual void Render() {
 		renderShader->use();
 		updateMatrixRender();
 		updateLightRender();
+		environmentMappingRender();
 	};
 	virtual void Destroy() = 0;
 	virtual void Update(float delataTime) = 0;
@@ -85,6 +95,7 @@ public:
 protected:
 	Shader shader;
 	Shader* renderShader;
+	Texture skyBoxTexture;
 
 private:
 	/* Self Property */
@@ -171,6 +182,14 @@ private:
 			renderShader->setFloat("spotLight.constant", spotLight->Constant);
 			renderShader->setFloat("spotLight.linear", spotLight->Linear);
 			renderShader->setFloat("spotLight.quadratic", spotLight->Quadratic);
+		}
+	}
+
+	void environmentMappingRender() {
+		if (skyBoxTexture.Id > 0 && skyBoxTexture.Type == "skybox") {
+			glActiveTexture(GL_TEXTURE0);
+			shader.setInt(skyBoxTexture.Name, 0);
+			glBindTexture(GL_TEXTURE_CUBE_MAP, this->skyBoxTexture.Id);
 		}
 	}
 };
