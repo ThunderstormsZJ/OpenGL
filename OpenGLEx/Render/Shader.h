@@ -8,12 +8,18 @@
 #include <GLFW/glfw3.h>
 #include <vector>
 #include <functional>
+#include "../Utils/ShaderLoader.hpp"
+
+using namespace Utils;
 
 // ∂¡»°Shaderµµ
 class Shader
 {
 public:
 	Shader(const char* vertexPath, const char* fragmentPath);
+	void loadVertexShader(const char* vertexPath);
+	void loadFragShader(const char* fragmentPath);
+	void loadGeometryShader(const char* geometryPath);
 	void use();
 	void setInt(const std::string &name, float value);
 	void setFloat(const std::string &name, float value);
@@ -22,6 +28,7 @@ public:
 	void setVec3(const std::string& name, float x, float y, float z);
 	void setBool(const std::string& name, bool value);
 private:
+	ShaderLoader loader;
 	const char* vertexSource;
 	const char*  fragmentSource;
 	unsigned int shaderProgramID;

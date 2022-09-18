@@ -85,6 +85,7 @@ public:
 
 	virtual void Render() {
 		renderShader->use();
+		renderShader->setFloat("time", static_cast<float>(glfwGetTime()));
 		updateMatrixRender();
 		updateLightRender();
 		environmentMappingRender();

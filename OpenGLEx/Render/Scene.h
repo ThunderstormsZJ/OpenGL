@@ -26,7 +26,19 @@ public:
 		//createLightCueBox();
 		//createCubePanel(); 
 		//createNanosuitModel(); // Ä£ÐÍ
-		createEnvironmentMapModel();
+		//createEnvironmentMapModel();
+		createSphere();
+	}
+
+	void createSphere() {
+		Shader shader("Shader/model_VertextShader.glsl", "Shader/model_FragmentShader.glsl");
+		auto sphere = std::make_shared<Sphere>(shader);
+
+		//Shader shader("Shader/Texture_VertextShader.glsl", "Shader/Texture_FragmentShader.glsl");
+		shader.loadGeometryShader("Shader/model_GeometryShader.gs");
+		//auto sphere = std::make_shared<Cube>(shader, CubeType::Box);
+		sphere->SetTexture("Resources/container.jpg");
+		addChild(sphere);
 	}
 
 	void createEnvironmentMapModel() {

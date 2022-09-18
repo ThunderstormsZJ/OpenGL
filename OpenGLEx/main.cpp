@@ -71,6 +71,8 @@ int main() {
 	//glFrontFace(GL_CCW); // GL_CCW: 逆时针 GL_CW: 顺时针 （默认逆时针）
 	//glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);	// 框线模式
 	
+	//glEnable(GL_PROGRAM_POINT_SIZE); //修改点大小的功能
+
 	OpenGLCommonAPI::PrintSupportExtensions();
 
 	ImGuiTool guiTool(window);

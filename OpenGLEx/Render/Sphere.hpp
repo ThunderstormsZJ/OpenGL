@@ -24,8 +24,8 @@ public:
 		stbi_set_flip_vertically_on_load(true);
 		Texture texture;
 		texture.Id = ImgCache::GetInstance().addTexture(imgPath, param);	// º”‘ÿÕº∆¨
-		texture.Name = "texture_normal";
-		texture.Type = "texture_normal";
+		texture.Name = "texture_diffuse1";
+		texture.Type = "texture_diffuse1";
 		texture.Path = imgPath;
 
 		for (int i = 0; i < this->m_meshs.size(); i++)

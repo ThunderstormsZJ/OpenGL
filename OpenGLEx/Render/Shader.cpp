@@ -1,32 +1,73 @@
 #include "Shader.h"
-#include "../Utils/ShaderLoader.hpp"
 
 using namespace std;
-using namespace Utils;
 
-Shader::Shader(const char* vertexPath, const char* fragmentPath)
+Shader::Shader(const char* vertexPath, const char* fragmentPath) :loader()
 {
-	GLuint vertexShader, fragmentShader;
+	// link
+	shaderProgramID = glCreateProgram();
+	loadVertexShader(vertexPath);
+	loadFragShader(fragmentPath);
+}
 
-	ShaderLoader loader;
-	loader.load(vertexPath);
-	vertexShader = loader.compile(GL_VERTEX_SHADER);	
-	
-	loader.load(fragmentPath);
-	fragmentShader = loader.compile(GL_FRAGMENT_SHADER);
-
+void Shader::loadVertexShader(const char* vertexPath)
+{
 	try
 	{
+		GLuint vertexShader;
+		loader.load(vertexPath);
+		vertexShader = loader.compile(GL_VERTEX_SHADER);
 		// link
-		shaderProgramID = glCreateProgram();
 		glAttachShader(shaderProgramID, vertexShader);
-		glAttachShader(shaderProgramID, fragmentShader);
 		glLinkProgram(shaderProgramID);
 		checkProgramErrors(shaderProgramID);
 
 		// delete
 		glDeleteShader(vertexShader);
+	}
+	catch (const std::exception& exc)
+	{
+		printf(exc.what());
+	}
+}
+
+void Shader::loadFragShader(const char* fragmentPath)
+{
+	try
+	{
+		GLuint fragmentShader;
+
+		loader.load(fragmentPath);
+		fragmentShader = loader.compile(GL_FRAGMENT_SHADER);
+		// link
+		glAttachShader(shaderProgramID, fragmentShader);
+		glLinkProgram(shaderProgramID);
+		checkProgramErrors(shaderProgramID);
+
+		// delete
 		glDeleteShader(fragmentShader);
+	}
+	catch (const std::exception& exc)
+	{
+		printf(exc.what());
+	}
+}
+
+void Shader::loadGeometryShader(const char* geometryPath)
+{
+	try
+	{
+		GLuint geometryShader;
+
+		loader.load(geometryPath);
+		geometryShader = loader.compile(GL_GEOMETRY_SHADER);
+		// link
+		glAttachShader(shaderProgramID, geometryShader);
+		glLinkProgram(shaderProgramID);
+		checkProgramErrors(shaderProgramID);
+
+		// delete
+		glDeleteShader(geometryShader);
 	}
 	catch (const std::exception& exc)
 	{

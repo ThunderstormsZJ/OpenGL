@@ -7,6 +7,13 @@ uniform mat4 model;
 uniform mat4 view;
 uniform mat4 projection;
 
+out VS_OUT {
+    vec2 texCoords;
+    vec3 normal;
+    vec3 fragPos;
+    mat4 viewMat;
+} vs_out;
+
 out mat4 ViewMat;
 out vec2 TexCoord;
 out vec3 Normal;
@@ -18,4 +25,9 @@ void main(){
    FragPos = vec3(view * model * vec4(aPos, 1.0));
    ViewMat = view;
    TexCoord = aTexCoord;
+
+   vs_out.texCoords = aTexCoord;
+   vs_out.normal = Normal;
+   vs_out.fragPos = FragPos;
+   vs_out.viewMat = view;
 }									

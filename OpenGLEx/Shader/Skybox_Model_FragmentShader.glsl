@@ -11,8 +11,8 @@ void main(){
 	// 因为天空盒的位置应该是始终固定的。
 	vec3 norm = normalize(Normal);
 	vec3 dir = normalize(FragPos - cameraPos);
-	//vec3 result = CalcSkyBoxReflectEnvironmentMap(norm, dir);
-	vec3 result = CalcSkyBoxRefractEnvironmentMap(norm, dir);
+	vec3 result = CalcSkyBoxReflectEnvironmentMap(norm, dir);
+	//vec3 result = CalcSkyBoxRefractEnvironmentMap(norm, dir);
 
 	FragColor = vec4(result, 1);
 }

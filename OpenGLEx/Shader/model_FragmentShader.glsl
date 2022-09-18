@@ -4,8 +4,6 @@
 
 out vec4 FragColor;
 
-in vec3 Normal;
-
 void main(){
 	vec3 norm = normalize(Normal);
 	vec3 viewDir = normalize(-FragPos); // viewPos - FragPos => (0,0,0) - FragPos => -FragPos
